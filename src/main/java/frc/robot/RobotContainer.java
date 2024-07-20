@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,9 +11,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot.RobotRunType;
-import frc.robot.subsystems.drive.Drivetrain;
-import frc.robot.subsystems.drive.DrivetrainIO;
-import frc.robot.subsystems.drive.DrivetrainVictorSP;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.swerve.SwerveIO;
+import frc.robot.subsystems.swerve.SwerveReal;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,6 +23,8 @@ import frc.robot.subsystems.drive.DrivetrainVictorSP;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    public static ShuffleboardTab mainDriverTab = Shuffleboard.getTab("Main Driver");
+
     /* Controllers */
     private final CommandXboxController driver = new CommandXboxController(Constants.driverID);
     private final CommandXboxController operator = new CommandXboxController(Constants.operatorID);
@@ -28,7 +33,7 @@ public class RobotContainer {
     private final SendableChooser<String> autoChooser = new SendableChooser<>();
 
     /* Subsystems */
-    private Drivetrain drivetrain;
+    private Swerve s_Swerve;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -38,15 +43,17 @@ public class RobotContainer {
         autoChooser.setDefaultOption("Wait 1 Second", "wait");
         switch (runtimeType) {
             case kReal:
-                drivetrain = new Drivetrain(new DrivetrainVictorSP());
+                s_Swerve = new Swerve(new SwerveReal());
                 break;
             case kSimulation:
                 // drivetrain = new Drivetrain(new DrivetrainSim() {});
                 break;
             default:
-                drivetrain = new Drivetrain(new DrivetrainIO() {});
+                s_Swerve = new Swerve(new SwerveIO() {});
         }
         // Configure the button bindings
+        s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver,
+            Constants.Swerve.isFieldRelative, Constants.Swerve.isOpenLoop));
         configureButtonBindings();
     }
 
