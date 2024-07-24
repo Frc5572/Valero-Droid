@@ -20,7 +20,7 @@ public interface SwerveModuleIO {
 
     public default void setDriveMotor(ControlRequest request) {}
 
-    public default void setAngleMotor(ControlRequest request) {}
+    public default void setAngleMotor(double request) {}
 
     public default void setAngleSelectedSensorPosition(double angle) {}
 

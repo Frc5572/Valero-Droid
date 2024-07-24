@@ -1,8 +1,6 @@
 
 package frc.robot.subsystems.swerve;
 
-import java.util.Arrays;
-import java.util.Map;
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -16,7 +14,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -39,11 +36,6 @@ public class Swerve extends SubsystemBase {
     private SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
     private SwerveIO swerveIO;
     private boolean hasInitialized = false;
-    private Boolean[] cameraSeesTarget = {false, false, false, false};
-    private GenericEntry aprilTagTarget = RobotContainer.mainDriverTab.add("See April Tag", false)
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withProperties(Map.of("Color when true", "green", "Color when false", "red"))
-        .withPosition(11, 0).withSize(2, 2).getEntry();
 
     /**
      * Swerve Subsystem
@@ -249,11 +241,6 @@ public class Swerve extends SubsystemBase {
 
 
         Logger.recordOutput("/Swerve/hasInitialized", hasInitialized);
-
-
-        field.setRobotPose(getPose());
-        aprilTagTarget
-            .setBoolean(Arrays.asList(cameraSeesTarget).stream().anyMatch(val -> val == true));
 
         SmartDashboard.putBoolean("Has Initialized", hasInitialized);
         SmartDashboard.putNumber("Gyro Yaw", getGyroYaw().getDegrees());

@@ -29,8 +29,6 @@ public class SwerveModule {
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
     private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
-
-    /* angle motor control requests */
     private final PositionVoltage anglePosition = new PositionVoltage(0);
 
     /**
@@ -69,7 +67,7 @@ public class SwerveModule {
      */
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
         desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
-        io.setAngleMotor(anglePosition.withPosition(desiredState.angle.getRotations()));
+        io.setAngleMotor(desiredState.angle.getRotations());
         setSpeed(desiredState, isOpenLoop);
     }
 
@@ -109,7 +107,7 @@ public class SwerveModule {
     public void resetToAbsolute() {
         double absolutePosition = getCANcoder().getRotations() - angleOffset.getRotations();
         io.setPositionAngleMotor(absolutePosition);
-        inputs.angleMotorSelectedPosition = absolutePosition;
+        inputs.absolutePositionAngleEncoder = absolutePosition;
     }
 
     /**
@@ -121,7 +119,7 @@ public class SwerveModule {
         return new SwerveModuleState(
             Conversions.rotationPerSecondToMetersPerSecond(inputs.driveMotorSelectedSensorVelocity,
                 Constants.Swerve.wheelCircumference),
-            Rotation2d.fromRotations(inputs.angleMotorSelectedPosition));
+            Rotation2d.fromRotations(inputs.absolutePositionAngleEncoder));
     }
 
     /**
@@ -133,7 +131,7 @@ public class SwerveModule {
         return new SwerveModulePosition(
             Conversions.rotationsToMeters(inputs.driveMotorSelectedPosition,
                 Constants.Swerve.wheelCircumference),
-            Rotation2d.fromRotations(inputs.angleMotorSelectedPosition));
+            Rotation2d.fromRotations(inputs.absolutePositionAngleEncoder));
 
     }
 }
