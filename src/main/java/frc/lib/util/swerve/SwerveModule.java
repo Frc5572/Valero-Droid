@@ -57,6 +57,7 @@ public class SwerveModule {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("SwerveModule" + moduleNumber, inputs);
+
     }
 
     /**
@@ -66,8 +67,8 @@ public class SwerveModule {
      * @param isOpenLoop Whether the state should be open or closed loop controlled
      */
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
-        io.setAngleMotor(desiredState.angle.getRotations());
+        desiredState = SwerveModuleState.optimize(desiredState, getCANcoder());
+        io.setAngleMotor(desiredState.angle.getRadians());
         setSpeed(desiredState, isOpenLoop);
     }
 
@@ -105,7 +106,7 @@ public class SwerveModule {
      * Reset the Swerve Module angle to face forward
      */
     public void resetToAbsolute() {
-        double absolutePosition = getCANcoder().getRotations() - angleOffset.getRotations();
+        double absolutePosition = getCANcoder().getRadians() - angleOffset.getRadians();
         io.setPositionAngleMotor(absolutePosition);
         inputs.absolutePositionAngleEncoder = absolutePosition;
     }
@@ -134,4 +135,6 @@ public class SwerveModule {
             Rotation2d.fromRotations(inputs.absolutePositionAngleEncoder));
 
     }
+
+
 }

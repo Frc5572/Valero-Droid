@@ -1,7 +1,6 @@
 
 package frc.lib.util.swerve;
 
-import java.util.function.Supplier;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -9,11 +8,12 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.controller.PIDController;
+import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 
 /**
@@ -23,17 +23,16 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
     private CANSparkMax mAngleMotor;
     private TalonFX mDriveMotor;
-    private PIDController angleController;
-    private AbsoluteEncoder angleMotorEncoder;
+    private SparkPIDController angleController;
     private CANcoder angleEncoder;
     private TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
     private CANcoderConfiguration swerveCANcoderConfig = new CANcoderConfiguration();
 
     private StatusSignal<Double> driveMotorSelectedPosition;
     private StatusSignal<Double> driveMotorSelectedSensorVelocity;
-    private Supplier<Double> angleMotorSelectedPosition;
     private StatusSignal<Double> absolutePositionAngleEncoder;
-    private double pidValue = 0;
+    SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
+
 
 
     /** Instantiating motors and Encoders */
@@ -44,8 +43,6 @@ public class SwerveModuleReal implements SwerveModuleIO {
         mDriveMotor = new TalonFX(driveMotorID);
         mAngleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
         angleEncoder = new CANcoder(cancoderID);
-        angleMotorEncoder =
-            mAngleMotor.getAbsoluteEncoder(com.revrobotics.SparkAbsoluteEncoder.Type.kDutyCycle);
 
         configAngleEncoder();
         configAngleMotor();
@@ -54,9 +51,10 @@ public class SwerveModuleReal implements SwerveModuleIO {
         angleEncoder.getPosition();
         driveMotorSelectedPosition = mDriveMotor.getPosition();
         driveMotorSelectedSensorVelocity = mDriveMotor.getVelocity();
-        angleMotorSelectedPosition = () -> angleMotorEncoder.getPosition();
         absolutePositionAngleEncoder = angleEncoder.getAbsolutePosition();
-        pidValue = absolutePositionAngleEncoder.getValue();
+        mAngleMotor.restoreFactoryDefaults();
+        desiredState.angle = new Rotation2d(absolutePositionAngleEncoder.getValue());
+
 
     }
 
@@ -80,11 +78,13 @@ public class SwerveModuleReal implements SwerveModuleIO {
         // Constants.Swerve.angleCurrentThresholdTime;
 
         // /* PID Config */
-        angleController = new PIDController(Constants.Swerve.angleKP, Constants.Swerve.angleKI,
-            Constants.Swerve.angleKD);
-        this.angleMotorEncoder.setPositionConversionFactor(Constants.Swerve.angleEncoderRot2Rad);
-        this.angleMotorEncoder
-            .setVelocityConversionFactor(Constants.Swerve.angleEncoderRPM2RadPerSec);
+        this.angleController = mAngleMotor.getPIDController();
+        this.angleController.setP(Constants.Swerve.angleKP);
+        this.angleController.setI(Constants.Swerve.angleKI);
+        this.angleController.setD(Constants.Swerve.angleKD);
+        this.angleController.setOutputRange(Constants.Swerve.angleMinOutput,
+            Constants.Swerve.angleMaxOutput);
+
         // mAngleMotor.getConfigurator().apply(swerveAngleFXConfig);
     }
 
@@ -136,9 +136,11 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
 
     @Override
-    public void setAngleMotor(double request) {
-        mAngleMotor.set(angleController.calculate(request, pidValue));
+    public void setAngleMotor(double v) {
+        angleController.setReference(v, ControlType.kPosition);
+
     }
+
 
     @Override
     public void setDriveMotor(ControlRequest request) {
@@ -150,10 +152,14 @@ public class SwerveModuleReal implements SwerveModuleIO {
         BaseStatusSignal.refreshAll(driveMotorSelectedPosition, driveMotorSelectedSensorVelocity);
         inputs.driveMotorSelectedPosition = driveMotorSelectedPosition.getValue();
         inputs.driveMotorSelectedSensorVelocity = driveMotorSelectedSensorVelocity.getValue();
-        inputs.angleMotorSelectedPosition = angleMotorSelectedPosition.get();
         inputs.absolutePositionAngleEncoder = absolutePositionAngleEncoder.getValue();
         // inputs.driveMotorTemp = mDriveMotor.getDeviceTemp().getValueAsDouble();
         // inputs.angleMotorTemp = mAngleMotor.getDeviceTemp().getValueAsDouble();
     }
+
+    // @Override
+    // public void setPositionAngleMotor(double absolutePosition) {
+    // angleMotorEncoder.setPosition(absolutePosition);
+    // }
 
 }

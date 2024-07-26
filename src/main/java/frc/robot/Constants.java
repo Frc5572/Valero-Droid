@@ -83,7 +83,9 @@ public final class Constants {
             SensorDirectionValue.CounterClockwise_Positive;
 
         /* Swerve Current Limiting */
-        public static final int angleCurrentLimit = 25;
+        public static final int angleCurrentLimit = 20;
+        public static final double angleMinOutput = -1;
+        public static final double angleMaxOutput = 1;
         public static final int angleCurrentThreshold = 40;
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
@@ -101,7 +103,7 @@ public final class Constants {
         public static final double closedLoopRamp = 0.0;
 
         /* Angle Motor PID Values */
-        public static final double angleKP = 0.2;
+        public static final double angleKP = 20.0;
         public static final double angleKI = 0.0;
         public static final double angleKD = 0.0;
 
@@ -121,13 +123,17 @@ public final class Constants {
         public static final double maxSpeed = 5.0;
         public static final double AUTO_MAX_SPEED = 3.0;
         /** Radians per Second */
-        public static final double maxAngularVelocity = 5.0;
+        public static final double maxAngularVelocity = 9.0;
+        public static final double maxAngularAcceleration = 9.0 * 5;
 
         /* Neutral Modes */
         public static final IdleMode angleNeutralMode = IdleMode.kCoast;
         public static final NeutralModeValue driveNeutralMode = NeutralModeValue.Brake;
-        public static final double angleEncoderRot2Rad = angleGearRatio * 2 * Math.PI;
-        public static final double angleEncoderRPM2RadPerSec = angleEncoderRot2Rad / 60;
+        public static final double AngleEncoderPositionFactor = (2 * Math.PI); // radians
+        public static final double AngleEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per
+                                                                                      // second
+        public static final double AngleEncoderPositionPIDMinInput = 0; // radians
+        public static final double AngleEncoderPositionPIDMaxInput = AngleEncoderPositionFactor; // radians
 
 
 
