@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot.RobotRunType;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.lightsabers.Lightsaber;
+import frc.robot.subsystems.lightsabers.LightsaberReal;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.SwerveIO;
 import frc.robot.subsystems.swerve.SwerveReal;
@@ -34,6 +36,7 @@ public class RobotContainer {
 
     /* Subsystems */
     private Swerve s_Swerve;
+    private Lightsaber s_Lightsabers;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -44,12 +47,14 @@ public class RobotContainer {
         switch (runtimeType) {
             case kReal:
                 s_Swerve = new Swerve(new SwerveReal());
+                s_Lightsabers = new Lightsaber(new LightsaberReal());
                 break;
             case kSimulation:
                 // drivetrain = new Drivetrain(new DrivetrainSim() {});
                 break;
             default:
                 s_Swerve = new Swerve(new SwerveIO() {});
+                s_Lightsabers = new Lightsaber(new LightsaberIO());
         }
         // Configure the button bindings
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver,
@@ -63,7 +68,9 @@ public class RobotContainer {
      * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
      * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
-    private void configureButtonBindings() {}
+    private void configureButtonBindings() {
+        driver.a().whileTrue(s_Lightsabers.turnLightsabers(.2));
+    }
 
     /**
      * Gets the user's selected autonomous command.

@@ -188,6 +188,14 @@ public final class Constants {
                 AUTO_MAX_SPEED, MOD0_MODOFFSET.getNorm(), new ReplanningConfig());
     }
 
+    public static final class LightsaberConstants {
+        public static final boolean inverted = false;
+        public static final IdleMode brakeMode = IdleMode.kBrake;
+        public static final int ls1 = 1;
+        public static final int ls2 = 2;
+        public static final int ls3 = 3;
+    }
+
     /**
      * Auto constants
      */
