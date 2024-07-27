@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot.RobotRunType;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.lightsabers.Lightsaber;
+import frc.robot.subsystems.lightsabers.LightsaberIO;
 import frc.robot.subsystems.lightsabers.LightsaberReal;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.SwerveIO;
@@ -54,7 +55,7 @@ public class RobotContainer {
                 break;
             default:
                 s_Swerve = new Swerve(new SwerveIO() {});
-                s_Lightsabers = new Lightsaber(new LightsaberIO());
+                s_Lightsabers = new Lightsaber(new LightsaberIO() {});
         }
         // Configure the button bindings
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver,
