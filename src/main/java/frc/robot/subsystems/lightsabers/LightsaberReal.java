@@ -13,6 +13,9 @@ public class LightsaberReal implements LightsaberIO {
     private CANSparkFlex lighstaberMotor2;
     private CANSparkFlex lighstaberMotor3;
 
+    /**
+     * Lightsaber Contructor
+     */
     public LightsaberReal() {
         lighstaberMotor1 =
             new CANSparkFlex(Constants.LightsaberConstants.ls1, MotorType.kBrushless);
