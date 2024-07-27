@@ -3,7 +3,6 @@ package frc.lib.util.swerve;
 
 import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -29,7 +28,6 @@ public class SwerveModule {
     /* drive motor control requests */
     private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
     private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
-    private final PositionVoltage anglePosition = new PositionVoltage(0);
 
     /**
      * Swerve Module
@@ -40,7 +38,7 @@ public class SwerveModule {
      * @param cancoderID CAN ID of the CANCoder
      * @param angleOffset Angle Offset of the CANCoder to align the wheels
      */
-    public SwerveModule(int moduleNumber, int driveMotorID, int angleMotorID,
+    public SwerveModule(int moduleNumber, int driveMotorID, int angleMotorID, int cancoderID,
         Rotation2d angleOffset, SwerveModuleIO io) {
         this.io = io;
 
@@ -54,6 +52,9 @@ public class SwerveModule {
         Logger.processInputs("SwerveModule" + moduleNumber, inputs);
     }
 
+    /**
+     * Periodic function
+     */
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("SwerveModule" + moduleNumber, inputs);

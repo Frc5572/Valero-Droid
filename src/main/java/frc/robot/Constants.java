@@ -129,11 +129,6 @@ public final class Constants {
         /* Neutral Modes */
         public static final IdleMode angleNeutralMode = IdleMode.kCoast;
         public static final NeutralModeValue driveNeutralMode = NeutralModeValue.Brake;
-        public static final double AngleEncoderPositionFactor = (2 * Math.PI); // radians
-        public static final double AngleEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per
-                                                                                      // second
-        public static final double AngleEncoderPositionPIDMinInput = 0; // radians
-        public static final double AngleEncoderPositionPIDMaxInput = AngleEncoderPositionFactor; // radians
 
 
 
