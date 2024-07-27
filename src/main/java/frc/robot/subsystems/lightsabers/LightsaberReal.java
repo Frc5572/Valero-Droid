@@ -14,7 +14,7 @@ public class LightsaberReal implements LightsaberIO {
     private CANSparkFlex lighstaberMotor3;
 
     /**
-     * Lightsaber Contructor
+     * Lightsaber Constructor
      */
     public LightsaberReal() {
         lighstaberMotor1 =
