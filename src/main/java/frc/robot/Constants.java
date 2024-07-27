@@ -189,6 +189,17 @@ public final class Constants {
     }
 
     /**
+     * Lightsaber Constants
+     */
+    public static final class LightsaberConstants {
+        public static final boolean inverted = false;
+        public static final IdleMode brakeMode = IdleMode.kBrake;
+        public static final int ls1 = 5;
+        public static final int ls2 = 6;
+        public static final int ls3 = 7;
+    }
+
+    /**
      * Auto constants
      */
     public static final class AutoConstants {
