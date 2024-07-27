@@ -2,6 +2,9 @@ package frc.robot.subsystems.lightsabers;
 
 import org.littletonrobotics.junction.AutoLog;
 
+/**
+ * Lightsaber IO Interface
+ */
 public interface LightsaberIO {
     /** Inputs Class for Swerve */
 

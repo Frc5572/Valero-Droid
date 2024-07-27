@@ -4,6 +4,9 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import frc.robot.Constants;
 
+/**
+ * Lightsaber Real
+ */
 public class LightsaberReal implements LightsaberIO {
 
     private CANSparkFlex lighstaberMotor1;
