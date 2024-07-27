@@ -48,12 +48,12 @@ public final class Constants {
         public static final edu.wpi.first.wpilibj.SPI.Port navXID =
             edu.wpi.first.wpilibj.SPI.Port.kMXP;
         public static final boolean invertGyro = true;
-        public static final boolean isFieldRelative = true;
+        public static final boolean isFieldRelative = false;
         public static final boolean isOpenLoop = false;
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(23.75);
-        public static final double wheelBase = Units.inchesToMeters(17.75);
+        public static final double trackWidth = Units.inchesToMeters(24.0);
+        public static final double wheelBase = Units.inchesToMeters(24.0);
         public static final double wheelDiameter = Units.inchesToMeters(3.8);
         public static final double wheelCircumference = wheelDiameter * Math.PI;
         public static final Translation2d MOD0_MODOFFSET =
@@ -70,8 +70,8 @@ public final class Constants {
                 new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
 
         /* Module Gear Ratios */
-        public static final double driveGearRatio = (4.13 / 1.0); // X2_16
-        public static final double angleGearRatio = (1.0 / 18.0); // (150 / 7) : 1
+        public static final double driveGearRatio = (4.40 / 1.0); // X2_16
+        public static final double angleGearRatio = (1.0 / 41.25); // (150 / 7) : 1
 
         /* Motor Inverts */
         public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
@@ -103,7 +103,7 @@ public final class Constants {
         public static final double closedLoopRamp = 0.0;
 
         /* Angle Motor PID Values */
-        public static final double angleKP = 20.0;
+        public static final double angleKP = 1.0;
         public static final double angleKI = 0.0;
         public static final double angleKD = 0.0;
 
@@ -120,7 +120,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 5.0;
+        public static final double maxSpeed = 1.0;
         public static final double AUTO_MAX_SPEED = 3.0;
         /** Radians per Second */
         public static final double maxAngularVelocity = 9.0;
@@ -143,11 +143,11 @@ public final class Constants {
          * Front Left Module - Module 0
          */
         public static final class Mod0 {
-            public static final int driveMotorID = 0;
-            public static final int angleMotorID = 3;
-            public static final int canCoderID = 0;
+            public static final int driveMotorID = 2;
+            public static final int angleMotorID = 1;
+            public static final int canCoderID = 2;
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(183.955078125);
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.186523);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.065674);
 
         }
 
@@ -155,11 +155,11 @@ public final class Constants {
          * Front Right Module - Module 1
          */
         public static final class Mod1 {
-            public static final int driveMotorID = 3;
-            public static final int angleMotorID = 4;
-            public static final int canCoderID = 3;
+            public static final int driveMotorID = 1;
+            public static final int angleMotorID = 2;
+            public static final int canCoderID = 1;
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(325.01953125);
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.000977);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.194580);
 
         }
 
@@ -167,11 +167,11 @@ public final class Constants {
          * Back Left Module - Module 2
          */
         public static final class Mod2 {
-            public static final int driveMotorID = 1;
-            public static final int angleMotorID = 2;
-            public static final int canCoderID = 1;
+            public static final int driveMotorID = 3;
+            public static final int angleMotorID = 4;
+            public static final int canCoderID = 3;
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(124.62890625);
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.193359);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.011230);
 
         }
 
@@ -179,11 +179,11 @@ public final class Constants {
          * Back Right Module - Module 3
          */
         public static final class Mod3 {
-            public static final int driveMotorID = 2;
-            public static final int angleMotorID = 1;
-            public static final int canCoderID = 2;
+            public static final int driveMotorID = 0;
+            public static final int angleMotorID = 3;
+            public static final int canCoderID = 0;
             // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(295.400390625);
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.067627);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.299561);
         }
 
         public static final HolonomicPathFollowerConfig pathFollowerConfig =

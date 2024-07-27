@@ -67,8 +67,8 @@ public class SwerveModule {
      * @param isOpenLoop Whether the state should be open or closed loop controlled
      */
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        desiredState = SwerveModuleState.optimize(desiredState, getCANcoder());
-        io.setAngleMotor(desiredState.angle.getDegrees());
+        desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
+        io.setAngleMotor(desiredState.angle.getRotations());
         setSpeed(desiredState, isOpenLoop);
     }
 
@@ -106,9 +106,9 @@ public class SwerveModule {
      * Reset the Swerve Module angle to face forward
      */
     public void resetToAbsolute() {
-        double absolutePosition = getCANcoder().getRadians() - angleOffset.getRadians();
+        double absolutePosition = getCANcoder().getRotations() - angleOffset.getRotations();
         io.setPositionAngleMotor(absolutePosition);
-        inputs.absolutePositionAngleEncoder = absolutePosition;
+        inputs.angleMotorSelectedPosition = absolutePosition;
     }
 
     /**
@@ -132,8 +132,7 @@ public class SwerveModule {
         return new SwerveModulePosition(
             Conversions.rotationsToMeters(inputs.driveMotorSelectedPosition,
                 Constants.Swerve.wheelCircumference),
-            Rotation2d.fromRotations(inputs.absolutePositionAngleEncoder));
-
+            Rotation2d.fromRotations(inputs.angleMotorSelectedPosition));
     }
 
 

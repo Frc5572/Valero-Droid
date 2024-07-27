@@ -8,7 +8,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -62,7 +62,6 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
     private void configAngleMotor() {
         /* Angle Motor Config */
-        this.mAngleMotor.burnFlash();
 
         /* Motor Inverts and Neutral Mode */
         this.mAngleMotor.setInverted(false);
@@ -74,6 +73,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
         // /* Current Limiting */
         this.mAngleMotor.setSmartCurrentLimit(Constants.Swerve.angleCurrentLimit);
+        this.mAngleMotor.setSecondaryCurrentLimit(Constants.Swerve.angleCurrentThreshold);
         // swerveAngleFXConfig.CurrentLimits.SupplyCurrentThreshold =
         // Constants.Swerve.angleCurrentThreshold;
         // swerveAngleFXConfig.CurrentLimits.SupplyTimeThreshold =
@@ -81,13 +81,20 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
         // /* PID Config */
         this.angleController = mAngleMotor.getPIDController();
+        this.angleController.setFeedbackDevice(this.angleMotorEncoder);
         this.angleController.setP(Constants.Swerve.angleKP);
         this.angleController.setI(Constants.Swerve.angleKI);
         this.angleController.setD(Constants.Swerve.angleKD);
         this.angleController.setOutputRange(Constants.Swerve.angleMinOutput,
             Constants.Swerve.angleMaxOutput);
 
-        // mAngleMotor.getConfigurator().apply(swerveAngleFXConfig);
+        this.angleMotorEncoder.setPositionConversionFactor(Constants.Swerve.angleGearRatio);
+        this.angleMotorEncoder.setVelocityConversionFactor(Constants.Swerve.angleGearRatio);
+        this.angleController.setPositionPIDWrappingEnabled(true);
+        this.angleController.setPositionPIDWrappingMinInput(-0.5);
+        this.angleController.setPositionPIDWrappingMaxInput(0.5);
+
+        this.mAngleMotor.burnFlash();
     }
 
     private void configDriveMotor() {
@@ -139,8 +146,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
     @Override
     public void setAngleMotor(double v) {
-
-        angleController.setReference(v, ControlType.kPosition);
+        angleController.setReference(v, CANSparkBase.ControlType.kPosition);
     }
 
 
@@ -151,14 +157,12 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
     @Override
     public void updateInputs(SwerveModuleInputs inputs) {
-        BaseStatusSignal.refreshAll(driveMotorSelectedPosition, driveMotorSelectedSensorVelocity);
+        BaseStatusSignal.refreshAll(driveMotorSelectedPosition, driveMotorSelectedSensorVelocity,
+            absolutePositionAngleEncoder);
         inputs.driveMotorSelectedPosition = driveMotorSelectedPosition.getValue();
         inputs.driveMotorSelectedSensorVelocity = driveMotorSelectedSensorVelocity.getValue();
         inputs.angleMotorSelectedPosition = angleMotorEncoder.getPosition();
         inputs.absolutePositionAngleEncoder = absolutePositionAngleEncoder.getValue();
-        System.out.println(inputs.angleMotorSelectedPosition);
-        // inputs.driveMotorTemp = mDriveMotor.getDeviceTemp().getValueAsDouble();
-        // inputs.angleMotorTemp = mAngleMotor.getDeviceTemp().getValueAsDouble();
     }
 
 
