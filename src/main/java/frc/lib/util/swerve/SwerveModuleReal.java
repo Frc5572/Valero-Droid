@@ -11,6 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -25,6 +26,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
     private TalonFX mDriveMotor;
     private SparkPIDController angleController;
     private CANcoder angleEncoder;
+    public RelativeEncoder angleMotorEncoder;
     private TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
     private CANcoderConfiguration swerveCANcoderConfig = new CANcoderConfiguration();
 
@@ -43,17 +45,17 @@ public class SwerveModuleReal implements SwerveModuleIO {
         mDriveMotor = new TalonFX(driveMotorID);
         mAngleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
         angleEncoder = new CANcoder(cancoderID);
+        angleMotorEncoder = mAngleMotor.getEncoder();
 
         configAngleEncoder();
         configAngleMotor();
         configDriveMotor();
 
-        angleEncoder.getPosition();
         driveMotorSelectedPosition = mDriveMotor.getPosition();
         driveMotorSelectedSensorVelocity = mDriveMotor.getVelocity();
         absolutePositionAngleEncoder = angleEncoder.getAbsolutePosition();
         mAngleMotor.restoreFactoryDefaults();
-        desiredState.angle = new Rotation2d(absolutePositionAngleEncoder.getValue());
+
 
 
     }
@@ -137,8 +139,8 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
     @Override
     public void setAngleMotor(double v) {
-        angleController.setReference(v, ControlType.kPosition);
 
+        angleController.setReference(v, ControlType.kPosition);
     }
 
 
@@ -152,14 +154,17 @@ public class SwerveModuleReal implements SwerveModuleIO {
         BaseStatusSignal.refreshAll(driveMotorSelectedPosition, driveMotorSelectedSensorVelocity);
         inputs.driveMotorSelectedPosition = driveMotorSelectedPosition.getValue();
         inputs.driveMotorSelectedSensorVelocity = driveMotorSelectedSensorVelocity.getValue();
+        inputs.angleMotorSelectedPosition = angleMotorEncoder.getPosition();
         inputs.absolutePositionAngleEncoder = absolutePositionAngleEncoder.getValue();
+        System.out.println(inputs.angleMotorSelectedPosition);
         // inputs.driveMotorTemp = mDriveMotor.getDeviceTemp().getValueAsDouble();
         // inputs.angleMotorTemp = mAngleMotor.getDeviceTemp().getValueAsDouble();
     }
 
-    // @Override
-    // public void setPositionAngleMotor(double absolutePosition) {
-    // angleMotorEncoder.setPosition(absolutePosition);
-    // }
+
+    @Override
+    public void setPositionAngleMotor(double absolutePosition) {
+        angleMotorEncoder.setPosition(absolutePosition);
+    }
 
 }

@@ -10,6 +10,7 @@ public interface SwerveModuleIO {
     public static class SwerveModuleInputs {
         public double driveMotorSelectedPosition;
         public double driveMotorSelectedSensorVelocity;
+        public double angleMotorSelectedPosition;
         public double absolutePositionAngleEncoder;
         // public double driveMotorTemp;
         // public double angleMotorTemp;

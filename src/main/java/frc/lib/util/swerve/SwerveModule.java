@@ -68,7 +68,7 @@ public class SwerveModule {
      */
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
         desiredState = SwerveModuleState.optimize(desiredState, getCANcoder());
-        io.setAngleMotor(desiredState.angle.getRadians());
+        io.setAngleMotor(desiredState.angle.getDegrees());
         setSpeed(desiredState, isOpenLoop);
     }
 
@@ -120,7 +120,7 @@ public class SwerveModule {
         return new SwerveModuleState(
             Conversions.rotationPerSecondToMetersPerSecond(inputs.driveMotorSelectedSensorVelocity,
                 Constants.Swerve.wheelCircumference),
-            Rotation2d.fromRotations(inputs.absolutePositionAngleEncoder));
+            Rotation2d.fromRotations(inputs.angleMotorSelectedPosition));
     }
 
     /**
