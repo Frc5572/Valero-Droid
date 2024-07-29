@@ -54,7 +54,6 @@ public class SwerveModuleReal implements SwerveModuleIO {
         driveMotorSelectedPosition = mDriveMotor.getPosition();
         driveMotorSelectedSensorVelocity = mDriveMotor.getVelocity();
         absolutePositionAngleEncoder = angleEncoder.getAbsolutePosition();
-        mAngleMotor.restoreFactoryDefaults();
 
 
 
@@ -62,6 +61,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
     private void configAngleMotor() {
         /* Angle Motor Config */
+        this.mAngleMotor.restoreFactoryDefaults();
 
         /* Motor Inverts and Neutral Mode */
         this.mAngleMotor.setInverted(false);

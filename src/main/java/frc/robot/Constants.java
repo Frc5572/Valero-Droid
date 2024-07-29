@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * Constants file.
@@ -198,6 +199,18 @@ public final class Constants {
         public static final int ls2 = 6;
         public static final int ls3 = 7;
     }
+
+    /**
+     * LED constants.
+     */
+    public static final class LEDConstants {
+        public static final int PWM_PORT = 0;
+        public static final int LED_COUNT = 60;
+        public static final Color INTAKE_COLOR = Color.kGreen;
+        public static final Color INDEXER_COLOR = Color.kPurple;
+        public static final Color ALERT_COLOR = Color.kWhite;
+    }
+
 
     /**
      * Auto constants
