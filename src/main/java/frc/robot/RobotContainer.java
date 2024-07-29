@@ -6,12 +6,15 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot.RobotRunType;
+import frc.robot.commands.MovingColorLEDs;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.lightsabers.Lightsaber;
 import frc.robot.subsystems.lightsabers.LightsaberIO;
 import frc.robot.subsystems.lightsabers.LightsaberReal;
@@ -38,6 +41,7 @@ public class RobotContainer {
     /* Subsystems */
     private Swerve s_Swerve;
     private Lightsaber s_Lightsabers;
+    private LEDs leds = new LEDs(Constants.LEDConstants.LED_COUNT, Constants.LEDConstants.PWM_PORT);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -60,6 +64,7 @@ public class RobotContainer {
         // Configure the button bindings
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver,
             Constants.Swerve.isFieldRelative, Constants.Swerve.isOpenLoop));
+        leds.setDefaultCommand(new MovingColorLEDs(leds, Color.kRed, 4, false));
         configureButtonBindings();
     }
 
@@ -71,6 +76,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         driver.a().whileTrue(s_Lightsabers.turnLightsabers(.2));
+        driver.b().whileTrue(new MovingColorLEDs(leds, Color.kBlue, 4, false));
     }
 
     /**
