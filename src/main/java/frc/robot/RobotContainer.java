@@ -21,6 +21,9 @@ import frc.robot.subsystems.lightsabers.LightsaberReal;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.SwerveIO;
 import frc.robot.subsystems.swerve.SwerveReal;
+import frc.robot.subsystems.turret.Turret;
+import frc.robot.subsystems.turret.TurretIO;
+import frc.robot.subsystems.turret.TurretReal;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,7 +36,6 @@ public class RobotContainer {
 
     /* Controllers */
     private final CommandXboxController driver = new CommandXboxController(Constants.driverID);
-    private final CommandXboxController operator = new CommandXboxController(Constants.operatorID);
 
     // Initialize AutoChooser Sendable
     private final SendableChooser<String> autoChooser = new SendableChooser<>();
@@ -41,6 +43,7 @@ public class RobotContainer {
     /* Subsystems */
     private Swerve s_Swerve;
     private Lightsaber s_Lightsabers;
+    private Turret s_Turret;
     private LEDs leds = new LEDs(Constants.LEDConstants.LED_COUNT, Constants.LEDConstants.PWM_PORT);
 
     /**
@@ -53,6 +56,7 @@ public class RobotContainer {
             case kReal:
                 s_Swerve = new Swerve(new SwerveReal());
                 s_Lightsabers = new Lightsaber(new LightsaberReal());
+                s_Turret = new Turret(new TurretReal());
                 break;
             case kSimulation:
                 // drivetrain = new Drivetrain(new DrivetrainSim() {});
@@ -60,12 +64,15 @@ public class RobotContainer {
             default:
                 s_Swerve = new Swerve(new SwerveIO() {});
                 s_Lightsabers = new Lightsaber(new LightsaberIO() {});
+                s_Turret = new Turret(new TurretIO() {});
         }
         // Configure the button bindings
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver,
             Constants.Swerve.isFieldRelative, Constants.Swerve.isOpenLoop));
         leds.setDefaultCommand(new MovingColorLEDs(leds, Color.kRed, 4, false));
+
         configureButtonBindings();
+
     }
 
     /**
@@ -77,6 +84,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         driver.a().whileTrue(s_Lightsabers.turnLightsabers(.2));
         driver.b().whileTrue(new MovingColorLEDs(leds, Color.kBlue, 4, false));
+        driver.povRight().whileTrue(s_Turret.turnTurret(.1));
+        driver.povLeft().whileTrue(s_Turret.turnTurret(-.1));
     }
 
     /**
