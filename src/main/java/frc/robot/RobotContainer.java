@@ -86,8 +86,12 @@ public class RobotContainer {
         driver.a().whileTrue(s_Lightsabers.turnLightsabers(.2));
         driver.b().whileTrue(new MovingColorLEDs(leds, Color.kBlue, 4, false));
         driver.y().onTrue(Commands.runOnce(() -> s_Swerve.resetModulesToAbsolute()));
-        driver.povRight().whileTrue(s_Turret.turnTurret(.1));
-        driver.povLeft().whileTrue(s_Turret.turnTurret(-.1));
+        driver.povRight()
+            .whileTrue(s_Turret.turnTurret(.1).unless(() -> s_Turret.getTurretPosition() > .95)
+                .until(() -> s_Turret.getTurretPosition() > .95));
+        driver.povLeft()
+            .whileTrue(s_Turret.turnTurret(-.1).unless(() -> s_Turret.getTurretPosition() < .05)
+                .until(() -> s_Turret.getTurretPosition() < .05));
     }
 
     /**
