@@ -48,6 +48,11 @@ public class SwerveModule {
 
         // lastAngle = getState().angle.getDegrees();
         io.updateInputs(inputs);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         resetToAbsolute();
         Logger.processInputs("SwerveModule" + moduleNumber, inputs);
     }
