@@ -34,4 +34,20 @@ public class Turret extends SubsystemBase {
         return Commands.startEnd(() -> turretIO.turnTurret(power), () -> turretIO.turnTurret(0),
             this);
     }
+
+    public Command turnTurretClockwise(double power) {
+        return this.turnTurret(power).unless(() -> this.getTurretPosition() > .95)
+            .until(() -> this.getTurretPosition() > .95);
+    }
+
+    public Command turnTurretCounterClockwise(double power) {
+        return this.turnTurret(-power).unless(() -> this.getTurretPosition() < .05)
+            .until(() -> this.getTurretPosition() < .05);
+    }
+
+    public Command turnBackandForth(double power) {
+        Command conditional = Commands.either(this.turnTurretClockwise(power),
+            this.turnTurretCounterClockwise(power), () -> this.getTurretPosition() < 0.5);
+        return Commands.repeatingSequence(conditional);
+    }
 }
