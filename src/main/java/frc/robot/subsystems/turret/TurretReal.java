@@ -6,6 +6,9 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
 
+/**
+ * Real Turret
+ */
 public class TurretReal implements TurretIO {
 
     private CANSparkFlex turretMotor =

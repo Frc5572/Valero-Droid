@@ -2,6 +2,9 @@ package frc.robot.subsystems.turret;
 
 import org.littletonrobotics.junction.AutoLog;
 
+/**
+ * Turret IO Interface
+ */
 public interface TurretIO {
 
     /** Inputs Class for Turret */
