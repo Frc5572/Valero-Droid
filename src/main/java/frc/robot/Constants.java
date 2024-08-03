@@ -211,6 +211,16 @@ public final class Constants {
         public static final Color ALERT_COLOR = Color.kWhite;
     }
 
+    /**
+     * LED constants.
+     */
+    public static final class TurretConstants {
+        public static final int motorID = 8;
+        public static final int encoderPort = 0;
+        public static final double absoluteEncoderOffset = 0.7578610189465255;
+        public static final double maxEncoder = 1.0;
+    }
+
 
     /**
      * Auto constants

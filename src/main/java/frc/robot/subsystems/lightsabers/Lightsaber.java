@@ -1,5 +1,6 @@
 package frc.robot.subsystems.lightsabers;
 
+import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,6 +25,7 @@ public class Lightsaber extends SubsystemBase {
     @Override
     public void periodic() {
         this.io.updateInputs(inputs);
+        Logger.processInputs("Lightsabers", inputs);
     }
 
     /**
