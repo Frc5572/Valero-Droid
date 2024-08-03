@@ -20,7 +20,6 @@ public class TurretReal implements TurretIO {
     /** Real Swerve Initializer */
     public TurretReal() {
         relativeEncoder = turretMotor.getEncoder();
-        // absoluteEncoder.setPositionOffset(Constants.TurretConstants.absoluteEncoderOffset);
     }
 
     @Override
