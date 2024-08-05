@@ -11,6 +11,8 @@ public class FlashingLEDColor extends Command {
     private int flashingDelay = 0;
     private Color color;
     private Color altColor;
+    private int flashDelay = 20;
+    private boolean pulse = true;
 
     /**
      * Command to flash the LED strip between 2 colors
@@ -28,6 +30,18 @@ public class FlashingLEDColor extends Command {
     }
 
     /**
+     * Command to flash the LED strip between 2 colors
+     *
+     * @param leds LED Subsystem
+     * @param color The first color
+     * @param altColor The second color
+     */
+    public FlashingLEDColor(LEDs leds, Color color, Color altColor, int delay) {
+        this(leds, color, altColor);
+        flashDelay = delay;
+    }
+
+    /**
      * Command to flash the LED strip between a color and black
      *
      * @param leds LED Subsystem
@@ -39,18 +53,28 @@ public class FlashingLEDColor extends Command {
 
     @Override
     public void execute() {
-        if (flashingDelay < 10) {
-            for (var i = 0; i < ledLength; i++) {
-                leds.setColor(i, color);
+        double value = Math.abs(Math.sin(flashingDelay * Math.PI / flashDelay) * 255);
+        if (flashingDelay < flashDelay) {
+            if (pulse) {
+                int red = (int) (color.red * value);
+                int green = (int) (color.green * value);
+                int blue = (int) (color.blue * value);
+                leds.setRGB(red, green, blue);
+            } else {
+                leds.setColor(color);
             }
         } else {
-            for (var i = 0; i < ledLength; i++) {
-                leds.setColor(i, altColor);
+            if (pulse) {
+                int red = (int) (altColor.red * value);
+                int green = (int) (altColor.green * value);
+                int blue = (int) (altColor.blue * value);
+                leds.setRGB(red, green, blue);
+            } else {
+                leds.setColor(altColor);
             }
         }
-        leds.setData();
         flashingDelay++;
-        flashingDelay %= 20;
+        flashingDelay %= flashDelay * 2;
     }
 
     @Override

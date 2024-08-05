@@ -205,7 +205,7 @@ public final class Constants {
      */
     public static final class LEDConstants {
         public static final int PWM_PORT = 0;
-        public static final int LED_COUNT = 60;
+        public static final int LED_COUNT = 120;
         public static final Color INTAKE_COLOR = Color.kGreen;
         public static final Color INDEXER_COLOR = Color.kPurple;
         public static final Color ALERT_COLOR = Color.kWhite;

@@ -14,6 +14,8 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -23,6 +25,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
     private Command autoChooser;
+
+    public static AddressableLEDBuffer controLedBuffer =
+        new AddressableLEDBuffer(Constants.LEDConstants.LED_COUNT);
+
+    @SuppressWarnings("IOCheck")
+    public static AddressableLED addressableLED =
+        new AddressableLED(Constants.LEDConstants.PWM_PORT);
+
+
 
     /**
      * Robnot Run type
@@ -62,6 +73,8 @@ public class Robot extends LoggedRobot {
                 Logger.recordMetadata("GitDirty", "Unknown");
                 break;
         }
+        addressableLED.setLength(controLedBuffer.getLength());
+        addressableLED.start();
 
 
 
@@ -116,6 +129,7 @@ public class Robot extends LoggedRobot {
         // order for
         // anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        addressableLED.setData(controLedBuffer);
     }
 
     @Override

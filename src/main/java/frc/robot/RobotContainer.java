@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot.RobotRunType;
-import frc.robot.commands.MovingColorLEDs;
+import frc.robot.commands.FlashingLEDColor;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.lightsabers.Lightsaber;
@@ -45,7 +45,8 @@ public class RobotContainer {
     private Swerve s_Swerve;
     private Lightsaber s_Lightsabers;
     private Turret s_Turret;
-    private LEDs leds = new LEDs(Constants.LEDConstants.LED_COUNT, Constants.LEDConstants.PWM_PORT);
+    private LEDs leds1 = new LEDs(0, 60);
+    private LEDs leds2 = new LEDs(60, 60);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -61,6 +62,9 @@ public class RobotContainer {
                 break;
             case kSimulation:
                 // drivetrain = new Drivetrain(new DrivetrainSim() {});
+                s_Swerve = new Swerve(new SwerveIO() {});
+                s_Lightsabers = new Lightsaber(new LightsaberIO() {});
+                s_Turret = new Turret(new TurretIO() {});
                 break;
             default:
                 s_Swerve = new Swerve(new SwerveIO() {});
@@ -70,10 +74,9 @@ public class RobotContainer {
         // Configure the button bindings
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver,
             Constants.Swerve.isFieldRelative, Constants.Swerve.isOpenLoop));
-        leds.setDefaultCommand(new MovingColorLEDs(leds, Color.kRed, 4, false));
-
+        leds1.setDefaultCommand(leds1.setStaticColor(Color.kBlack));
+        leds2.setDefaultCommand(leds2.setStaticColor(Color.kBlack));
         configureButtonBindings();
-
     }
 
     /**
@@ -85,7 +88,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         driver.a().toggleOnTrue(s_Lightsabers.turnLightsabers(.4));
         driver.b().toggleOnTrue(s_Turret.turnBackandForth(.1));
-        driver.x().toggleOnTrue(new MovingColorLEDs(leds, Color.kBlue, 4, false));
+        driver.x().toggleOnTrue(new FlashingLEDColor(leds1, Color.kRed, Color.kBlack, 60));
         driver.y().onTrue(Commands.runOnce(() -> s_Swerve.resetModulesToAbsolute()));
         driver.povRight().whileTrue(s_Turret.turnTurretClockwise(.1));
         driver.povLeft().whileTrue(s_Turret.turnTurretCounterClockwise(.1));
