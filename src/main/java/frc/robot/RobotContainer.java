@@ -83,12 +83,13 @@ public class RobotContainer {
      * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        driver.a().whileTrue(s_Lightsabers.turnLightsabers(.2));
-        driver.b().whileTrue(new MovingColorLEDs(leds, Color.kBlue, 4, false));
+        driver.a().toggleOnTrue(s_Lightsabers.turnLightsabers(.4));
+        driver.b().toggleOnTrue(s_Turret.turnBackandForth(.1));
+        driver.x().toggleOnTrue(new MovingColorLEDs(leds, Color.kBlue, 4, false));
         driver.y().onTrue(Commands.runOnce(() -> s_Swerve.resetModulesToAbsolute()));
         driver.povRight().whileTrue(s_Turret.turnTurretClockwise(.1));
         driver.povLeft().whileTrue(s_Turret.turnTurretCounterClockwise(.1));
-        driver.rightTrigger().whileTrue(s_Turret.turnBackandForth(.1));
+        driver.rightTrigger().whileTrue(new TeleopSwerve(s_Swerve, driver, false, false, 4));
     }
 
     /**

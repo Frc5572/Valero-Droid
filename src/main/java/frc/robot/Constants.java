@@ -55,7 +55,7 @@ public final class Constants {
         /* Drivetrain Constants */
         public static final double trackWidth = Units.inchesToMeters(24.0);
         public static final double wheelBase = Units.inchesToMeters(24.0);
-        public static final double wheelDiameter = Units.inchesToMeters(3.8);
+        public static final double wheelDiameter = Units.inchesToMeters(3.0);
         public static final double wheelCircumference = wheelDiameter * Math.PI;
         public static final Translation2d MOD0_MODOFFSET =
             new Translation2d(wheelBase / 2.0, trackWidth / 2.0);
@@ -121,7 +121,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 1.0;
+        public static final double maxSpeed = 3.0;
         public static final double AUTO_MAX_SPEED = 3.0;
         /** Radians per Second */
         public static final double maxAngularVelocity = 9.0;

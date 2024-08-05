@@ -1,5 +1,6 @@
 package frc.robot.subsystems.turret;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -20,6 +21,7 @@ public class TurretReal implements TurretIO {
     /** Real Swerve Initializer */
     public TurretReal() {
         relativeEncoder = turretMotor.getEncoder();
+        turretMotor.setIdleMode(IdleMode.kBrake);
     }
 
     @Override
