@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot.RobotRunType;
 import frc.robot.commands.FlashingLEDColor;
+import frc.robot.commands.MovingColorLEDs;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.lightsabers.Lightsaber;
@@ -74,8 +75,8 @@ public class RobotContainer {
         // Configure the button bindings
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver,
             Constants.Swerve.isFieldRelative, Constants.Swerve.isOpenLoop));
-        leds1.setDefaultCommand(leds1.setStaticColor(Color.kBlack));
-        leds2.setDefaultCommand(leds2.setStaticColor(Color.kBlack));
+        leds1.setDefaultCommand(leds1.setStaticColor(Color.kRed));
+        leds2.setDefaultCommand(new MovingColorLEDs(leds2, Color.kYellow, 3, false));
         configureButtonBindings();
     }
 
