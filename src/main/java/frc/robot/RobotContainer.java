@@ -47,7 +47,7 @@ public class RobotContainer {
     private Lightsaber s_Lightsabers;
     private Turret s_Turret;
     private LEDs leds1 = new LEDs(0, 60);
-    private LEDs leds2 = new LEDs(60, 60);
+    private LEDs leds2 = new LEDs(60, 120);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -75,8 +75,8 @@ public class RobotContainer {
         // Configure the button bindings
         s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver,
             Constants.Swerve.isFieldRelative, Constants.Swerve.isOpenLoop));
-        leds1.setDefaultCommand(leds1.setStaticColor(Color.kRed));
-        leds2.setDefaultCommand(new MovingColorLEDs(leds2, Color.kYellow, 3, false));
+        leds1.setDefaultCommand(leds1.setStaticColor(Color.kBlack));
+        leds2.setDefaultCommand(leds2.setStaticColor(Color.kBlack));
         configureButtonBindings();
     }
 
@@ -88,8 +88,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         driver.a().toggleOnTrue(s_Lightsabers.turnLightsabers(.4));
-        driver.b().toggleOnTrue(s_Turret.turnBackandForth(.1));
-        driver.x().toggleOnTrue(new FlashingLEDColor(leds1, Color.kRed, Color.kBlack, 60));
+        driver.b().toggleOnTrue(
+            s_Turret.turnBackandForth(.1).alongWith(s_Lightsabers.turnLightsabers(.4)));
+        driver.x().toggleOnTrue(new FlashingLEDColor(leds1, Color.kRed, Color.kBlack, 60)
+            .alongWith(new MovingColorLEDs(leds2, Color.kWhite, 3, false)));
         driver.y().onTrue(Commands.runOnce(() -> s_Swerve.resetModulesToAbsolute()));
         driver.povRight().whileTrue(s_Turret.turnTurretClockwise(.1));
         driver.povLeft().whileTrue(s_Turret.turnTurretCounterClockwise(.1));

@@ -52,6 +52,11 @@ public class FlashingLEDColor extends Command {
     }
 
     @Override
+    public void initialize() {
+        flashingDelay = 0;
+    }
+
+    @Override
     public void execute() {
         double value = Math.abs(Math.sin(flashingDelay * Math.PI / flashDelay) * 255);
         if (flashingDelay < flashDelay) {
@@ -74,7 +79,7 @@ public class FlashingLEDColor extends Command {
             }
         }
         flashingDelay++;
-        flashingDelay %= flashDelay * 2;
+        flashingDelay %= (flashDelay * 2);
     }
 
     @Override
