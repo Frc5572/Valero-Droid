@@ -9,7 +9,6 @@ import frc.robot.subsystems.LEDs;
  */
 public class MovingColorLEDs extends Command {
     private final LEDs leds;
-    private int ledLength;
     private Color color;
     private int count;
     private boolean inverted = false;
@@ -30,7 +29,6 @@ public class MovingColorLEDs extends Command {
         this.color = color;
         this.count = count + 2;
         this.inverted = inverted;
-        ledLength = leds.getLength();
         addRequirements(leds);
     }
 
@@ -39,11 +37,11 @@ public class MovingColorLEDs extends Command {
         Color theColor = inverted ? Color.kBlack : color;
         Color secondColor = inverted ? color : Color.kBlack;
         if (movingColorDelay == 0) {
-            for (var i = 0; i < ledLength; i++) {
+            for (var i = 0; i < leds.getLength(); i++) {
                 if (Math.abs(i - movingLED) < count) {
-                    leds.setColor(i, theColor);
+                    leds.setColor(i + leds.getStart(), theColor);
                 } else {
-                    leds.setColor(i, secondColor);
+                    leds.setColor(i + leds.getStart(), secondColor);
                 }
             }
             if (movingDirection) {
@@ -51,10 +49,9 @@ public class MovingColorLEDs extends Command {
             } else {
                 movingLED--;
             }
-            if (movingLED >= ledLength - 1 || movingLED <= 0) {
+            if (movingLED >= leds.getLength() - 1 || movingLED <= 0) {
                 movingDirection = !movingDirection;
             }
-            leds.setData();
         }
         movingColorDelay += 1;
         movingColorDelay %= 1;
