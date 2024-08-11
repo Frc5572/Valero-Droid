@@ -71,8 +71,8 @@ public final class Constants {
                 new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
 
         /* Module Gear Ratios */
-        public static final double driveGearRatio = (4.40 / 1.0); // X2_16
-        public static final double angleGearRatio = (1.0 / 41.25); // (150 / 7) : 1
+        public static final double driveGearRatio = (4.13 / 1.0); // 4.13 : 1
+        public static final double angleGearRatio = (1.0 / 41.25); // 1 : (165 / 4)
 
         /* Motor Inverts */
         public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
@@ -109,7 +109,7 @@ public final class Constants {
         public static final double angleKD = 0.0;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.02;
+        public static final double driveKP = 0.12;
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;

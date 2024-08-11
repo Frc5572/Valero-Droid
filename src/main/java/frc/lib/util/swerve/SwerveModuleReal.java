@@ -54,9 +54,6 @@ public class SwerveModuleReal implements SwerveModuleIO {
         driveMotorSelectedPosition = mDriveMotor.getPosition();
         driveMotorSelectedSensorVelocity = mDriveMotor.getVelocity();
         absolutePositionAngleEncoder = angleEncoder.getAbsolutePosition();
-
-
-
     }
 
     private void configAngleMotor() {

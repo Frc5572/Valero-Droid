@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import frc.lib.math.Conversions;
 import frc.robot.Constants;
 
@@ -48,11 +49,7 @@ public class SwerveModule {
 
         // lastAngle = getState().angle.getDegrees();
         io.updateInputs(inputs);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        Timer.delay(1.0);
         resetToAbsolute();
         Logger.processInputs("SwerveModule" + moduleNumber, inputs);
     }

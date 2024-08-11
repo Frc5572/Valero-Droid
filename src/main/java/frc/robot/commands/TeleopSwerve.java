@@ -50,9 +50,9 @@ public class TeleopSwerve extends Command {
 
     @Override
     public void execute() {
-        double yaxis = -controller.getLeftY() * speedMultiplier;
-        double xaxis = -controller.getLeftX() * speedMultiplier;
-        double raxis = -controller.getRightX() * speedMultiplier;
+        double yaxis = -controller.getLeftY();
+        double xaxis = -controller.getLeftX();
+        double raxis = -controller.getRightX();
 
         /* Deadbands */
         yaxis = (Math.abs(yaxis) < Constants.STICK_DEADBAND) ? 0
@@ -65,8 +65,8 @@ public class TeleopSwerve extends Command {
         // System.out.println(swerveDrive.getStringYaw());
 
         Translation2d translation =
-            new Translation2d(yaxis, xaxis).times(Constants.Swerve.maxSpeed);
-        double rotation = raxis * Constants.Swerve.maxAngularVelocity;
+            new Translation2d(yaxis, xaxis).times(Constants.Swerve.maxSpeed).times(speedMultiplier);
+        double rotation = raxis * Constants.Swerve.maxAngularVelocity * speedMultiplier;
         swerveDrive.drive(translation, rotation, fieldRelative, openLoop);
     }
 }

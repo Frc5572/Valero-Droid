@@ -95,7 +95,8 @@ public class RobotContainer {
         driver.y().onTrue(Commands.runOnce(() -> s_Swerve.resetModulesToAbsolute()));
         driver.povRight().whileTrue(s_Turret.turnTurretClockwise(.1));
         driver.povLeft().whileTrue(s_Turret.turnTurretCounterClockwise(.1));
-        driver.rightTrigger().whileTrue(new TeleopSwerve(s_Swerve, driver, false, false, 4));
+        driver.rightTrigger().whileTrue(new TeleopSwerve(s_Swerve, driver,
+            Constants.Swerve.isFieldRelative, Constants.Swerve.isOpenLoop, 4));
     }
 
     /**
