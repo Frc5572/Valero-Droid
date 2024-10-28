@@ -49,7 +49,7 @@ public final class Constants {
         public static final edu.wpi.first.wpilibj.SPI.Port navXID =
             edu.wpi.first.wpilibj.SPI.Port.kMXP;
         public static final boolean invertGyro = true;
-        public static final boolean isFieldRelative = false;
+        public static final boolean isFieldRelative = true;
         public static final boolean isOpenLoop = false;
 
         /* Drivetrain Constants */
@@ -91,7 +91,7 @@ public final class Constants {
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 35;
+        public static final int driveCurrentLimit = 45;
         public static final int driveCurrentThreshold = 60;
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
@@ -121,10 +121,10 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 1.0;
+        public static final double maxSpeed = 5.0;
         public static final double AUTO_MAX_SPEED = 3.0;
         /** Radians per Second */
-        public static final double maxAngularVelocity = 9.0;
+        public static final double maxAngularVelocity = 14.0;
         public static final double maxAngularAcceleration = 9.0 * 5;
 
         /* Neutral Modes */
