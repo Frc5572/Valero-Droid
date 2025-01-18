@@ -1,6 +1,10 @@
 
 package frc.lib.util.swerve;
 
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -73,7 +77,7 @@ public class SwerveModule {
      * @param isOpenLoop Whether the state should be open or closed loop controlled
      */
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
-        desiredState = SwerveModuleState.optimize(desiredState, getState().angle);
+        desiredState.optimize(getState().angle);
         io.setAngleMotor(desiredState.angle.getRotations());
         setSpeed(desiredState, isOpenLoop);
     }
@@ -88,14 +92,14 @@ public class SwerveModule {
         if (isOpenLoop) {
             driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
             io.setDriveMotor(driveDutyCycle);
-            inputs.driveMotorSelectedSensorVelocity = driveDutyCycle.Output;
+            inputs.driveMotorSelectedSensorVelocity = RadiansPerSecond.of(driveDutyCycle.Output);
         } else {
             driveVelocity.Velocity = Conversions.metersPerSecondToRotationPerSecond(
                 desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference);
             driveVelocity.FeedForward =
                 driveFeedForward.calculate(desiredState.speedMetersPerSecond);
             io.setDriveMotor(driveVelocity);
-            inputs.driveMotorSelectedSensorVelocity = driveDutyCycle.Output;
+            inputs.driveMotorSelectedSensorVelocity = RadiansPerSecond.of(driveDutyCycle.Output);
         }
     }
 
@@ -105,7 +109,7 @@ public class SwerveModule {
      * @return The rotation of the CANCoder in {@link Rotation2d}
      */
     public Rotation2d getCANcoder() {
-        return Rotation2d.fromRotations(inputs.absolutePositionAngleEncoder);
+        return Rotation2d.fromRotations(inputs.absolutePositionAngleEncoder.in(Rotations));//.in(VoltsPerMeterPerSecond));
     }
 
     /**
@@ -124,7 +128,7 @@ public class SwerveModule {
      */
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-            Conversions.rotationPerSecondToMetersPerSecond(inputs.driveMotorSelectedSensorVelocity,
+            Conversions.rotationPerSecondToMetersPerSecond(inputs.driveMotorSelectedSensorVelocity.in(RotationsPerSecond),
                 Constants.Swerve.wheelCircumference),
             Rotation2d.fromRotations(inputs.angleMotorSelectedPosition));
     }
@@ -136,7 +140,7 @@ public class SwerveModule {
      */
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-            Conversions.rotationsToMeters(inputs.driveMotorSelectedPosition,
+            Conversions.rotationsToMeters(inputs.driveMotorSelectedPosition.in(Rotations),
                 Constants.Swerve.wheelCircumference),
             Rotation2d.fromRotations(inputs.angleMotorSelectedPosition));
     }

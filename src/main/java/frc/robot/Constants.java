@@ -4,6 +4,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.studica.frc.AHRS.NavXComType;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -43,8 +45,7 @@ public final class Constants {
         public static final double AUTO_ROTATION_KI = 0.0;
         public static final double AUTO_ROTATION_KD = 0.0;
 
-        public static final edu.wpi.first.wpilibj.SPI.Port navXID =
-            edu.wpi.first.wpilibj.SPI.Port.kMXP;
+        public static final NavXComType navXID = NavXComType.kMXP_SPI;
         public static final boolean invertGyro = true;
         public static final boolean isFieldRelative = false;
         public static final boolean isOpenLoop = false;

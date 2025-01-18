@@ -24,7 +24,7 @@ public class TurretReal implements TurretIO {
 
     @Override
     public void updateInputs(TurretInputs inputs) {
-        inputs.absoluteEncoderPos = absoluteEncoder.getAbsolutePosition();
+        inputs.absoluteEncoderPos = absoluteEncoder.get();
         inputs.motorVelocity = relativeEncoder.getVelocity();
         inputs.relativeEncoderPos = relativeEncoder.getPosition();
     }
