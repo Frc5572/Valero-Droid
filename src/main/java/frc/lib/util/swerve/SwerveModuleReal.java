@@ -66,7 +66,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
     private void configAngleMotor() {
         /* Angle Motor Config */
-        this.mAngleMotor.restoreFactoryDefaults();
+        //this.mAngleMotor.restoreFactoryDefaults();
 
         /* Motor Inverts and Neutral Mode */
         config
@@ -109,7 +109,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
         this.angleController.setPositionPIDWrappingMinInput(-0.5);
         this.angleController.setPositionPIDWrappingMaxInput(0.5);
 
-        this.mAngleMotor.burnFlash();
+        //this.mAngleMotor.burnFlash();
     }
 
     private void configDriveMotor() {
