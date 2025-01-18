@@ -4,7 +4,6 @@ package frc.lib.util.swerve;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
-
 import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -109,7 +108,7 @@ public class SwerveModule {
      * @return The rotation of the CANCoder in {@link Rotation2d}
      */
     public Rotation2d getCANcoder() {
-        return Rotation2d.fromRotations(inputs.absolutePositionAngleEncoder.in(Rotations));//.in(VoltsPerMeterPerSecond));
+        return Rotation2d.fromRotations(inputs.absolutePositionAngleEncoder.in(Rotations));
     }
 
     /**
@@ -128,7 +127,8 @@ public class SwerveModule {
      */
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-            Conversions.rotationPerSecondToMetersPerSecond(inputs.driveMotorSelectedSensorVelocity.in(RotationsPerSecond),
+            Conversions.rotationPerSecondToMetersPerSecond(
+                inputs.driveMotorSelectedSensorVelocity.in(RotationsPerSecond),
                 Constants.Swerve.wheelCircumference),
             Rotation2d.fromRotations(inputs.angleMotorSelectedPosition));
     }
@@ -144,6 +144,5 @@ public class SwerveModule {
                 Constants.Swerve.wheelCircumference),
             Rotation2d.fromRotations(inputs.angleMotorSelectedPosition));
     }
-
 
 }

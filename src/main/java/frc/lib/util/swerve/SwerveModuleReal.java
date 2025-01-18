@@ -8,16 +8,16 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
@@ -72,9 +72,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
         /* Angle Motor Config */
 
         /* Motor Inverts and Neutral Mode */
-        config
-            .inverted(true)
-            .idleMode(IdleMode.kBrake);
+        config.inverted(true).idleMode(IdleMode.kBrake);
         // /* Current Limiting */
         swerveDriveFXConfig.CurrentLimits.SupplyCurrentLimitEnable =
             Constants.Swerve.angleEnableCurrentLimit;
@@ -83,22 +81,22 @@ public class SwerveModuleReal implements SwerveModuleIO {
             Constants.Swerve.angleCurrentThreshold;
         swerveDriveFXConfig.CurrentLimits.SupplyCurrentLowerTime =
             Constants.Swerve.angleCurrentThresholdTime;
-      
-        // /* PID Config */
-        config.closedLoop
-            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .pid(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD).positionWrappingEnabled(true)
-                .positionWrappingMinInput(-0.5).positionWrappingMaxInput(0.5).outputRange(Constants.Swerve.angleMinOutput,
-                Constants.Swerve.angleMaxOutput);
-    
-        this.angleController = mAngleMotor.getClosedLoopController();
- 
 
-        config.encoder
-            .positionConversionFactor(Constants.Swerve.angleGearRatio)
+        // /* PID Config */
+        config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            .pid(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD)
+            .positionWrappingEnabled(true).positionWrappingMinInput(-0.5)
+            .positionWrappingMaxInput(0.5)
+            .outputRange(Constants.Swerve.angleMinOutput, Constants.Swerve.angleMaxOutput);
+
+        this.angleController = mAngleMotor.getClosedLoopController();
+
+
+        config.encoder.positionConversionFactor(Constants.Swerve.angleGearRatio)
             .velocityConversionFactor(Constants.Swerve.angleGearRatio);
 
-        this.mAngleMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        this.mAngleMotor.configure(config, ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters);
     }
 
     private void configDriveMotor() {

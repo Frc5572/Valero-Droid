@@ -69,16 +69,16 @@ public class Swerve extends SubsystemBase {
             .withPosition(0, 0); // place it in the top-left corner
 
         // Logging callback for target robot pose
-       // PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-         //   field.getObject("target pose").setPose(pose);
-        //});
+        // PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+        // Do whatever you want with the pose here
+        // field.getObject("target pose").setPose(pose);
+        // });
 
         // Logging callback for the active path, this is sent as a list of poses
-        //PathPlannerLogging.setLogActivePathCallback((poses) -> {
-            // Do whatever you want with the poses here
-          //  field.getObject("path").setPoses(poses);
-        //});
+        // PathPlannerLogging.setLogActivePathCallback((poses) -> {
+        // Do whatever you want with the poses here
+        // field.getObject("path").setPoses(poses);
+        // });
     }
 
     /**
