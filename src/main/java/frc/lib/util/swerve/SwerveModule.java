@@ -1,7 +1,6 @@
 
 package frc.lib.util.swerve;
 
-import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import org.littletonrobotics.junction.Logger;
@@ -52,7 +51,7 @@ public class SwerveModule {
         // lastAngle = getState().angle.getDegrees();
         io.updateInputs(inputs);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -91,14 +90,12 @@ public class SwerveModule {
         if (isOpenLoop) {
             driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
             io.setDriveMotor(driveDutyCycle);
-            inputs.driveMotorSelectedSensorVelocity = RadiansPerSecond.of(driveDutyCycle.Output);
         } else {
             driveVelocity.Velocity = Conversions.metersPerSecondToRotationPerSecond(
                 desiredState.speedMetersPerSecond, Constants.Swerve.wheelCircumference);
             driveVelocity.FeedForward =
                 driveFeedForward.calculate(desiredState.speedMetersPerSecond);
             io.setDriveMotor(driveVelocity);
-            inputs.driveMotorSelectedSensorVelocity = RadiansPerSecond.of(driveDutyCycle.Output);
         }
     }
 
@@ -117,7 +114,7 @@ public class SwerveModule {
     public void resetToAbsolute() {
         double absolutePosition = getCANcoder().getRotations() - angleOffset.getRotations();
         io.setPositionAngleMotor(absolutePosition);
-        inputs.angleMotorSelectedPosition = absolutePosition;
+        inputs.angleMotorSelectedPosition = Rotations.of(absolutePosition);
     }
 
     /**
@@ -130,7 +127,7 @@ public class SwerveModule {
             Conversions.rotationPerSecondToMetersPerSecond(
                 inputs.driveMotorSelectedSensorVelocity.in(RotationsPerSecond),
                 Constants.Swerve.wheelCircumference),
-            Rotation2d.fromRotations(inputs.angleMotorSelectedPosition));
+            Rotation2d.fromRotations(inputs.angleMotorSelectedPosition.in(Rotations)));
     }
 
     /**
@@ -142,7 +139,7 @@ public class SwerveModule {
         return new SwerveModulePosition(
             Conversions.rotationsToMeters(inputs.driveMotorSelectedPosition.in(Rotations),
                 Constants.Swerve.wheelCircumference),
-            Rotation2d.fromRotations(inputs.angleMotorSelectedPosition));
+            Rotation2d.fromRotations(inputs.angleMotorSelectedPosition.in(Rotations)));
     }
 
 }

@@ -1,6 +1,8 @@
 
 package frc.lib.util.swerve;
 
+import static edu.wpi.first.units.Units.Rotations;
+import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -8,6 +10,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -43,13 +46,14 @@ public class SwerveModuleReal implements SwerveModuleIO {
     SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
     private SparkMaxConfig config = new SparkMaxConfig();
+    private int moduleNumber;
 
 
 
     /** Instantiating motors and Encoders */
     public SwerveModuleReal(int moduleNumber, int driveMotorID, int angleMotorID, int cancoderID,
         Rotation2d angleOffset) {
-
+        this.moduleNumber = moduleNumber;
 
         mDriveMotor = new TalonFX(driveMotorID);
         mAngleMotor = new SparkMax(angleMotorID, MotorType.kBrushless);
@@ -73,27 +77,16 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
         /* Motor Inverts and Neutral Mode */
         config.inverted(true).idleMode(IdleMode.kBrake);
-        // /* Current Limiting */
-        swerveDriveFXConfig.CurrentLimits.SupplyCurrentLimitEnable =
-            Constants.Swerve.angleEnableCurrentLimit;
-        swerveDriveFXConfig.CurrentLimits.SupplyCurrentLimit = Constants.Swerve.angleCurrentLimit;
-        swerveDriveFXConfig.CurrentLimits.SupplyCurrentLowerLimit =
-            Constants.Swerve.angleCurrentThreshold;
-        swerveDriveFXConfig.CurrentLimits.SupplyCurrentLowerTime =
-            Constants.Swerve.angleCurrentThresholdTime;
-
         // /* PID Config */
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD)
             .positionWrappingEnabled(true).positionWrappingMinInput(-0.5)
             .positionWrappingMaxInput(0.5)
             .outputRange(Constants.Swerve.angleMinOutput, Constants.Swerve.angleMaxOutput);
-
-        this.angleController = mAngleMotor.getClosedLoopController();
-
-
         config.encoder.positionConversionFactor(Constants.Swerve.angleGearRatio)
             .velocityConversionFactor(Constants.Swerve.angleGearRatio);
+
+        this.angleController = mAngleMotor.getClosedLoopController();
 
         this.mAngleMotor.configure(config, ResetMode.kResetSafeParameters,
             PersistMode.kPersistParameters);
@@ -140,7 +133,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
     private void configAngleEncoder() {
         /* Angle Encoder Config */
         swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.Swerve.cancoderInvert;
-
+        swerveCANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
         angleEncoder.getConfigurator().apply(swerveCANcoderConfig);
     }
 
@@ -163,14 +156,15 @@ public class SwerveModuleReal implements SwerveModuleIO {
             absolutePositionAngleEncoder);
         inputs.driveMotorSelectedPosition = driveMotorSelectedPosition.getValue();
         inputs.driveMotorSelectedSensorVelocity = driveMotorSelectedSensorVelocity.getValue();
-        inputs.angleMotorSelectedPosition = angleMotorEncoder.getPosition();
+        inputs.angleMotorSelectedPosition = Rotations.of(angleMotorEncoder.getPosition());
         inputs.absolutePositionAngleEncoder = absolutePositionAngleEncoder.getValue();
     }
 
 
     @Override
     public void setPositionAngleMotor(double absolutePosition) {
-        angleMotorEncoder.setPosition(absolutePosition);
+        REVLibError a = angleMotorEncoder.setPosition(absolutePosition);
+        Logger.recordOutput("SetPositionAngleError/" + moduleNumber, a);
     }
 
 }

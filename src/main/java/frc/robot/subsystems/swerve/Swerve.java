@@ -106,7 +106,7 @@ public class Swerve extends SubsystemBase {
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
-
+        Logger.recordOutput("Swerve/DesiredStates", desiredStates);
         for (SwerveModule mod : swerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
@@ -138,6 +138,7 @@ public class Swerve extends SubsystemBase {
      *
      * @return Array of Swerve Module States
      */
+    @AutoLogOutput(key = "Swerve/Module States")
     public SwerveModuleState[] getModuleStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (SwerveModule mod : swerveMods) {
