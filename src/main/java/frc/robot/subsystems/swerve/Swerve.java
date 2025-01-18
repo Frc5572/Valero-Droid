@@ -20,10 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.lib.util.FieldConstants;
 import frc.lib.util.swerve.SwerveModule;
-import frc.lib.util.swerve.SwerveModuleInputsAutoLogged;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.swerve.SwerveIO.SwerveInputs;
 
 /**
  * Swerve Subsystem
@@ -33,8 +31,7 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] swerveMods;
     private final Field2d field = new Field2d();
     private double fieldOffset;
-    private SwerveInputs inputs1 = new SwerveInputs();
-    private SwerveModuleInputsAutoLogged inputs2 = new SwerveModuleInputsAutoLogged();
+    private SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
     private SwerveIO swerveIO;
     private boolean hasInitialized = false;
 
@@ -62,7 +59,7 @@ public class Swerve extends SubsystemBase {
         swerveOdometry = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics,
             getGyroYaw(), getModulePositions(), new Pose2d());
 
-        swerveIO.updateInputs(inputs1);
+        swerveIO.updateInputs(inputs);
 
         RobotContainer.mainDriverTab.add("Field Pos", field).withWidget(BuiltInWidgets.kField)
             .withSize(8, 4) // make the widget 2x1
@@ -194,7 +191,7 @@ public class Swerve extends SubsystemBase {
      * @return Current rotation/yaw of gyro as {@link Rotation2d}
      */
     public Rotation2d getGyroYaw() {
-        float yaw = inputs1.yaw;
+        float yaw = inputs.yaw;
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(-yaw)
             : Rotation2d.fromDegrees(yaw);
     }
@@ -231,12 +228,12 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-        swerveIO.updateInputs(inputs1);
+        swerveIO.updateInputs(inputs);
         for (var mod : swerveMods) {
             mod.periodic();
         }
         swerveOdometry.update(getGyroYaw(), getModulePositions());
-        Logger.processInputs("Swerve", inputs2);
+        Logger.processInputs("Swerve", inputs);
 
 
         Logger.recordOutput("/Swerve/hasInitialized", hasInitialized);
