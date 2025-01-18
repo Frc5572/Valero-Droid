@@ -14,7 +14,6 @@ public class Turret extends SubsystemBase {
 
     private TurretInputsAutoLogged inputs = new TurretInputsAutoLogged();
     private TurretIO turretIO;
-    // private PIDController pidController = new PIDController(0, 0, 0);
 
     public Turret(TurretIO io) {
         this.turretIO = io;

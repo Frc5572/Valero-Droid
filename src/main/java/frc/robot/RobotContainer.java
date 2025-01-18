@@ -60,7 +60,6 @@ public class RobotContainer {
                 s_Turret = new Turret(new TurretReal());
                 break;
             case kSimulation:
-                // drivetrain = new Drivetrain(new DrivetrainSim() {});
                 break;
             default:
                 s_Swerve = new Swerve(new SwerveIO() {});

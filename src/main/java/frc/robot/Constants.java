@@ -152,7 +152,6 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 1;
-            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(325.01953125);
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.194580);
 
         }
@@ -164,7 +163,6 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 3;
-            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(124.62890625);
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.011230);
 
         }
@@ -176,15 +174,9 @@ public final class Constants {
             public static final int driveMotorID = 0;
             public static final int angleMotorID = 3;
             public static final int canCoderID = 0;
-            // public static final Rotation2d angleOffset = Rotation2d.fromDegrees(295.400390625);
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.299561);
         }
 
-        //public static final HolonomicPathFollowerConfig pathFollowerConfig =
-          //  new HolonomicPathFollowerConfig(new PIDConstants(5.0, 0, 0),
-            //    new PIDConstants(AUTO_ROTATION_KP, AUTO_ROTATION_KI, AUTO_ROTATION_KD),
-                // Drive base radius (distance from center to furthest module)
-              //  AUTO_MAX_SPEED, MOD0_MODOFFSET.getNorm(), new ReplanningConfig());
     }
 
     /**

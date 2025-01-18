@@ -36,25 +36,12 @@ public class LightsaberReal implements LightsaberIO {
         lighstaberMotor2.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         lighstaberMotor3.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        //lighstaberMotor1.restoreFactoryDefaults();
-        //lighstaberMotor2.restoreFactoryDefaults();
-        //lighstaberMotor3.restoreFactoryDefaults();
-
         config
             .inverted(true)
             .idleMode(IdleMode.kBrake);
-        //lighstaberMotor1.setInverted(Constants.LightsaberConstants.inverted);
-        //lighstaberMotor2.setInverted(Constants.LightsaberConstants.inverted);
-        //lighstaberMotor3.setInverted(Constants.LightsaberConstants.inverted);
         lighstaberMotor1.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         lighstaberMotor2.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         lighstaberMotor3.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        //lighstaberMotor2.setIdleMode(Constants.LightsaberConstants.brakeMode);
-        //lighstaberMotor1.setIdleMode(Constants.LightsaberConstants.brakeMode);
-        //lighstaberMotor3.setIdleMode(Constants.LightsaberConstants.brakeMode);
-        //lighstaberMotor1.burnFlash();
-        //lighstaberMotor2.burnFlash();
-        //lighstaberMotor3.burnFlash();
     }
 
     @Override

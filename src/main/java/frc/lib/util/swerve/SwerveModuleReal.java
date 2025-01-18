@@ -70,19 +70,11 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
     private void configAngleMotor() {
         /* Angle Motor Config */
-        //this.mAngleMotor.restoreFactoryDefaults();
 
         /* Motor Inverts and Neutral Mode */
         config
             .inverted(true)
             .idleMode(IdleMode.kBrake);
-        //this.mAngleMotor.setInverted(false);
-        //this.mAngleMotor.setIdleMode(Constants.Swerve.angleNeutralMode);
-
-        /* Gear Ratio and Wrapping Config */
-        // swerveAngleFXConfig.Feedback.SensorToMechanismRatio = Constants.Swerve.angleGearRatio;
-        // swerveAngleFXConfig.ClosedLoopGeneral.ContinuousWrap = true;
-
         // /* Current Limiting */
         swerveDriveFXConfig.CurrentLimits.SupplyCurrentLimitEnable =
             Constants.Swerve.angleEnableCurrentLimit;
@@ -91,11 +83,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
             Constants.Swerve.angleCurrentThreshold;
         swerveDriveFXConfig.CurrentLimits.SupplyCurrentLowerTime =
             Constants.Swerve.angleCurrentThresholdTime;
-        // swerveAngleFXConfig.CurrentLimits.SupplyCurrentThreshold =
-        // Constants.Swerve.angleCurrentThreshold;
-        // swerveAngleFXConfig.CurrentLimits.SupplyTimeThreshold =
-        // Constants.Swerve.angleCurrentThresholdTime;
-
+      
         // /* PID Config */
         config.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -104,24 +92,11 @@ public class SwerveModuleReal implements SwerveModuleIO {
                 Constants.Swerve.angleMaxOutput);
     
         this.angleController = mAngleMotor.getClosedLoopController();
-        //this.angleController.setFeedbackDevice(this.angleMotorEncoder);
-        //this.angleController.setP(Constants.Swerve.angleKP);
-        //this.angleController.setI(Constants.Swerve.angleKI);
-        //this.angleController.setD(Constants.Swerve.angleKD);
-        // this.angleController.setOutputRange(Constants.Swerve.angleMinOutput,
-        //     Constants.Swerve.angleMaxOutput);
+ 
 
         config.encoder
             .positionConversionFactor(Constants.Swerve.angleGearRatio)
             .velocityConversionFactor(Constants.Swerve.angleGearRatio);
-        //this.angleMotorEncoder.setPositionConversionFactor(Constants.Swerve.angleGearRatio);
-        //this.angleMotorEncoder.setVelocityConversionFactor(Constants.Swerve.angleGearRatio);
-        
-        //this.angleController.setPositionPIDWrappingEnabled(true);
-        // this.angleController.setPositionPIDWrappingMinInput(-0.5);
-        // this.angleController.setPositionPIDWrappingMaxInput(0.5);
-
-        //this.mAngleMotor.burnFlash();
 
         this.mAngleMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }

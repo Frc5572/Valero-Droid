@@ -64,10 +64,6 @@ public class Swerve extends SubsystemBase {
 
         swerveIO.updateInputs(inputs1);
 
-        //AutoBuilder.configureHolonomic(this::getPose, this::resetOdometry, this::getChassisSpeeds,
-          //  this::setModuleStates, Constants.Swerve.pathFollowerConfig, () -> shouldFlipPath(),
-            //this);
-
         RobotContainer.mainDriverTab.add("Field Pos", field).withWidget(BuiltInWidgets.kField)
             .withSize(8, 4) // make the widget 2x1
             .withPosition(0, 0); // place it in the top-left corner
