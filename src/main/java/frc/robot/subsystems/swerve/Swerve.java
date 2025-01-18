@@ -4,8 +4,6 @@ package frc.robot.subsystems.swerve;
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.lib.util.FieldConstants;
 import frc.lib.util.swerve.SwerveModule;
+import frc.lib.util.swerve.SwerveModuleInputsAutoLogged;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
@@ -33,7 +32,7 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] swerveMods;
     private final Field2d field = new Field2d();
     private double fieldOffset;
-    private SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
+    private SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
     private SwerveIO swerveIO;
     private boolean hasInitialized = false;
 
@@ -63,25 +62,25 @@ public class Swerve extends SubsystemBase {
 
         swerveIO.updateInputs(inputs);
 
-        AutoBuilder.configureHolonomic(this::getPose, this::resetOdometry, this::getChassisSpeeds,
-            this::setModuleStates, Constants.Swerve.pathFollowerConfig, () -> shouldFlipPath(),
-            this);
+        //AutoBuilder.configureHolonomic(this::getPose, this::resetOdometry, this::getChassisSpeeds,
+          //  this::setModuleStates, Constants.Swerve.pathFollowerConfig, () -> shouldFlipPath(),
+            //this);
 
         RobotContainer.mainDriverTab.add("Field Pos", field).withWidget(BuiltInWidgets.kField)
             .withSize(8, 4) // make the widget 2x1
             .withPosition(0, 0); // place it in the top-left corner
 
         // Logging callback for target robot pose
-        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+       // PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
             // Do whatever you want with the pose here
-            field.getObject("target pose").setPose(pose);
-        });
+         //   field.getObject("target pose").setPose(pose);
+        //});
 
         // Logging callback for the active path, this is sent as a list of poses
-        PathPlannerLogging.setLogActivePathCallback((poses) -> {
+        //PathPlannerLogging.setLogActivePathCallback((poses) -> {
             // Do whatever you want with the poses here
-            field.getObject("path").setPoses(poses);
-        });
+          //  field.getObject("path").setPoses(poses);
+        //});
     }
 
     /**

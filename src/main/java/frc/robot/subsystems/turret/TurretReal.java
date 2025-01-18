@@ -1,7 +1,7 @@
 package frc.robot.subsystems.turret;
 
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
@@ -11,8 +11,8 @@ import frc.robot.Constants;
  */
 public class TurretReal implements TurretIO {
 
-    private CANSparkFlex turretMotor =
-        new CANSparkFlex(Constants.TurretConstants.motorID, MotorType.kBrushless);
+    private SparkFlex turretMotor =
+        new SparkFlex(Constants.TurretConstants.motorID, MotorType.kBrushless);
     private RelativeEncoder relativeEncoder;
     private DutyCycleEncoder absoluteEncoder =
         new DutyCycleEncoder(Constants.TurretConstants.encoderPort);
