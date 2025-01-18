@@ -18,6 +18,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.Constants;
 
 /**
@@ -33,9 +35,9 @@ public class SwerveModuleReal implements SwerveModuleIO {
     private TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
     private CANcoderConfiguration swerveCANcoderConfig = new CANcoderConfiguration();
 
-    private StatusSignal<Double> driveMotorSelectedPosition;
-    private StatusSignal<Double> driveMotorSelectedSensorVelocity;
-    private StatusSignal<Double> absolutePositionAngleEncoder;
+    private StatusSignal<Angle> driveMotorSelectedPosition;
+    private StatusSignal<AngularVelocity> driveMotorSelectedSensorVelocity;
+    private StatusSignal<Angle> absolutePositionAngleEncoder;
     SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
     private SparkMaxConfig config = new SparkMaxConfig();
@@ -91,6 +93,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
         config.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD);
+    
         this.angleController = mAngleMotor.getClosedLoopController();
         //this.angleController.setFeedbackDevice(this.angleMotorEncoder);
         //this.angleController.setP(Constants.Swerve.angleKP);
