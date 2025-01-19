@@ -137,7 +137,7 @@ public class Swerve extends SubsystemBase {
      */
     @AutoLogOutput(key = "Swerve/Module States")
     public SwerveModuleState[] getModuleStates() {
-        SwerveModuleState[] states = new SwerveModuleState[4];
+        SwerveModuleState[] states = new SwerveModuleState[swerveMods.length];
         for (SwerveModule mod : swerveMods) {
             states[mod.moduleNumber] = mod.getState();
         }
@@ -150,7 +150,7 @@ public class Swerve extends SubsystemBase {
      * @return Array of Swerve Module Positions
      */
     public SwerveModulePosition[] getModulePositions() {
-        SwerveModulePosition[] positions = new SwerveModulePosition[4];
+        SwerveModulePosition[] positions = new SwerveModulePosition[swerveMods.length];
         for (SwerveModule mod : swerveMods) {
             positions[mod.moduleNumber] = mod.getPosition();
         }
@@ -266,7 +266,7 @@ public class Swerve extends SubsystemBase {
      * Gets a list containing all 4 swerve module positions
      */
     public SwerveModulePosition[] getSwerveModulePositions() {
-        SwerveModulePosition[] positions = new SwerveModulePosition[4];
+        SwerveModulePosition[] positions = new SwerveModulePosition[swerveMods.length];
         for (SwerveModule mod : swerveMods) {
             positions[mod.moduleNumber] = mod.getPosition();
         }

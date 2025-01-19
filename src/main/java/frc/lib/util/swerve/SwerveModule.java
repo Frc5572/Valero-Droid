@@ -55,7 +55,7 @@ public class SwerveModule {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        // resetToAbsolute();
+        resetToAbsolute();
         Logger.processInputs("SwerveModule" + moduleNumber, inputs);
     }
 
@@ -114,7 +114,7 @@ public class SwerveModule {
     public void resetToAbsolute() {
         double absolutePosition = getCANcoder().getRotations() - angleOffset.getRotations();
         io.setPositionAngleMotor(absolutePosition);
-        // inputs.angleMotorSelectedPosition = Rotations.of(absolutePosition);
+        inputs.angleMotorSelectedPosition = Rotations.of(absolutePosition);
     }
 
     /**

@@ -80,7 +80,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // driver.a().whileTrue(s_Lightsabers.turnLightsabers(.2));
         // driver.b().whileTrue(new MovingColorLEDs(leds, Color.kBlue, 4, false));
-        driver.y().onTrue(Commands.runOnce(() -> s_Swerve.resetModulesToAbsolute()));
+        driver.y().onTrue(
+            Commands.runOnce(() -> s_Swerve.resetModulesToAbsolute()).ignoringDisable(true));
+        driver.x().onTrue(Commands.runOnce(() -> s_Swerve.resetFieldRelativeOffset()));
         // driver.povRight().whileTrue(s_Turret.turnTurretClockwise(.1));
         // driver.povLeft().whileTrue(s_Turret.turnTurretCounterClockwise(.1));
         // driver.rightTrigger().whileTrue(s_Turret.turnBackandForth(.1));

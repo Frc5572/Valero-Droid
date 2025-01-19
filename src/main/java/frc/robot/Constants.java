@@ -62,11 +62,10 @@ public final class Constants {
          * rectangular/square 4 module swerve
          */
         public static final SwerveDriveKinematics swerveKinematics =
-            new SwerveDriveKinematics(new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
-                new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
-                new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
-
+            new SwerveDriveKinematics(new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+                new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
+                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0),
+                new Translation2d(-wheelBase / 2.0, trackWidth / 2.0));
         /* Module Gear Ratios */
         public static final double driveGearRatio = (4.40 / 1.0); // X2_16
         public static final double angleGearRatio = (1.0 / 41.25); // (150 / 7) : 1

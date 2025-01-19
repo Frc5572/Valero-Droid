@@ -22,7 +22,6 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.Constants;
@@ -43,7 +42,6 @@ public class SwerveModuleReal implements SwerveModuleIO {
     private StatusSignal<Angle> driveMotorSelectedPosition;
     private StatusSignal<AngularVelocity> driveMotorSelectedSensorVelocity;
     private StatusSignal<Angle> absolutePositionAngleEncoder;
-    SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
     private SparkMaxConfig config = new SparkMaxConfig();
     private int moduleNumber;
@@ -76,7 +74,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
         /* Angle Motor Config */
 
         /* Motor Inverts and Neutral Mode */
-        config.inverted(true).idleMode(IdleMode.kBrake);
+        config.inverted(true).idleMode(IdleMode.kBrake).voltageCompensation(12);
         // /* PID Config */
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD)
