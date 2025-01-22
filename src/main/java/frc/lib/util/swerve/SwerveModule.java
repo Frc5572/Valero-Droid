@@ -153,7 +153,7 @@ public class SwerveModule {
         return new SwerveModulePosition(
             Conversions.rotationsToMeters(inputs.driveMotorSelectedPosition.in(Rotations),
                 Constants.Swerve.wheelCircumference),
-            Rotation2d.fromRotations(getCANcoder().getRotations() - angleOffset.getRotations()));
+            Rotation2d.fromRotations(inputs.angleMotorSelectedPosition.in(Rotations)));
     }
 
 }
