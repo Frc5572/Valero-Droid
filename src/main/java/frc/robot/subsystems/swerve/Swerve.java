@@ -144,6 +144,21 @@ public class Swerve extends SubsystemBase {
         return states;
     }
 
+
+    // /**
+    // * Get Swerve Module Absolute States
+    // *
+    // * @return Array of Swerve Module States
+    // */
+    // @AutoLogOutput(key = "Swerve/Module Absolute States")
+    // public SwerveModuleState[] getModuleAbsoluteStates() {
+    // SwerveModuleState[] states = new SwerveModuleState[swerveMods.length];
+    // for (SwerveModule mod : swerveMods) {
+    // states[mod.moduleNumber] = mod.getAbsoluteState();
+    // }
+    // return states;
+    // }
+
     /**
      * Get Swerve Module Positions
      *

@@ -130,6 +130,20 @@ public class SwerveModule {
             Rotation2d.fromRotations(inputs.angleMotorSelectedPosition.in(Rotations)));
     }
 
+    // /**
+    // * Get the absolute current Swerve Module State
+    // *
+    // * @return The current {@link SwerveModuleState}
+    // */
+    // public SwerveModuleState getAbsoluteState() {
+    // return new SwerveModuleState(
+    // Conversions.rotationPerSecondToMetersPerSecond(
+    // inputs.driveMotorSelectedSensorVelocity.in(RotationsPerSecond),
+    // Constants.Swerve.wheelCircumference),
+    // Rotation2d.fromRotations(inputs.absolutePositionAngleEncoder.in(Rotations)));
+    // }
+
+
     /**
      * Get the current Swerve Module Position
      *
@@ -139,7 +153,7 @@ public class SwerveModule {
         return new SwerveModulePosition(
             Conversions.rotationsToMeters(inputs.driveMotorSelectedPosition.in(Rotations),
                 Constants.Swerve.wheelCircumference),
-            Rotation2d.fromRotations(inputs.angleMotorSelectedPosition.in(Rotations)));
+            Rotation2d.fromRotations(getCANcoder().getRotations() - angleOffset.getRotations()));
     }
 
 }

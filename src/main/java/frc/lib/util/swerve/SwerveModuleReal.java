@@ -74,7 +74,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
         /* Angle Motor Config */
 
         /* Motor Inverts and Neutral Mode */
-        config.inverted(true).idleMode(IdleMode.kBrake).voltageCompensation(12);
+        config.inverted(false).idleMode(IdleMode.kBrake).voltageCompensation(12);
         // /* PID Config */
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD)
