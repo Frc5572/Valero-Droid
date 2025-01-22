@@ -4,8 +4,6 @@ package frc.robot.subsystems.swerve;
 import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -63,25 +61,21 @@ public class Swerve extends SubsystemBase {
 
         swerveIO.updateInputs(inputs);
 
-        AutoBuilder.configureHolonomic(this::getPose, this::resetOdometry, this::getChassisSpeeds,
-            this::setModuleStates, Constants.Swerve.pathFollowerConfig, () -> shouldFlipPath(),
-            this);
-
         RobotContainer.mainDriverTab.add("Field Pos", field).withWidget(BuiltInWidgets.kField)
             .withSize(8, 4) // make the widget 2x1
             .withPosition(0, 0); // place it in the top-left corner
 
         // Logging callback for target robot pose
-        PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
-            // Do whatever you want with the pose here
-            field.getObject("target pose").setPose(pose);
-        });
+        // PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+        // Do whatever you want with the pose here
+        // field.getObject("target pose").setPose(pose);
+        // });
 
         // Logging callback for the active path, this is sent as a list of poses
-        PathPlannerLogging.setLogActivePathCallback((poses) -> {
-            // Do whatever you want with the poses here
-            field.getObject("path").setPoses(poses);
-        });
+        // PathPlannerLogging.setLogActivePathCallback((poses) -> {
+        // Do whatever you want with the poses here
+        // field.getObject("path").setPoses(poses);
+        // });
     }
 
     /**
@@ -109,7 +103,7 @@ public class Swerve extends SubsystemBase {
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
-
+        Logger.recordOutput("Swerve/DesiredStates", desiredStates);
         for (SwerveModule mod : swerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
@@ -141,13 +135,29 @@ public class Swerve extends SubsystemBase {
      *
      * @return Array of Swerve Module States
      */
+    @AutoLogOutput(key = "Swerve/Module States")
     public SwerveModuleState[] getModuleStates() {
-        SwerveModuleState[] states = new SwerveModuleState[4];
+        SwerveModuleState[] states = new SwerveModuleState[swerveMods.length];
         for (SwerveModule mod : swerveMods) {
             states[mod.moduleNumber] = mod.getState();
         }
         return states;
     }
+
+
+    // /**
+    // * Get Swerve Module Absolute States
+    // *
+    // * @return Array of Swerve Module States
+    // */
+    // @AutoLogOutput(key = "Swerve/Module Absolute States")
+    // public SwerveModuleState[] getModuleAbsoluteStates() {
+    // SwerveModuleState[] states = new SwerveModuleState[swerveMods.length];
+    // for (SwerveModule mod : swerveMods) {
+    // states[mod.moduleNumber] = mod.getAbsoluteState();
+    // }
+    // return states;
+    // }
 
     /**
      * Get Swerve Module Positions
@@ -155,7 +165,7 @@ public class Swerve extends SubsystemBase {
      * @return Array of Swerve Module Positions
      */
     public SwerveModulePosition[] getModulePositions() {
-        SwerveModulePosition[] positions = new SwerveModulePosition[4];
+        SwerveModulePosition[] positions = new SwerveModulePosition[swerveMods.length];
         for (SwerveModule mod : swerveMods) {
             positions[mod.moduleNumber] = mod.getPosition();
         }
@@ -271,7 +281,7 @@ public class Swerve extends SubsystemBase {
      * Gets a list containing all 4 swerve module positions
      */
     public SwerveModulePosition[] getSwerveModulePositions() {
-        SwerveModulePosition[] positions = new SwerveModulePosition[4];
+        SwerveModulePosition[] positions = new SwerveModulePosition[swerveMods.length];
         for (SwerveModule mod : swerveMods) {
             positions[mod.moduleNumber] = mod.getPosition();
         }

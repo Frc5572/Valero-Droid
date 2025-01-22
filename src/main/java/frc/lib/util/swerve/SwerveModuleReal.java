@@ -1,6 +1,8 @@
 
 package frc.lib.util.swerve;
 
+import static edu.wpi.first.units.Units.Rotations;
+import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -8,13 +10,20 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.Constants;
 
 /**
@@ -22,28 +31,30 @@ import frc.robot.Constants;
  */
 public class SwerveModuleReal implements SwerveModuleIO {
 
-    private CANSparkMax mAngleMotor;
+    private SparkMax mAngleMotor;
     private TalonFX mDriveMotor;
-    private SparkPIDController angleController;
+    private SparkClosedLoopController angleController;
     private CANcoder angleEncoder;
     public RelativeEncoder angleMotorEncoder;
     private TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
     private CANcoderConfiguration swerveCANcoderConfig = new CANcoderConfiguration();
 
-    private StatusSignal<Double> driveMotorSelectedPosition;
-    private StatusSignal<Double> driveMotorSelectedSensorVelocity;
-    private StatusSignal<Double> absolutePositionAngleEncoder;
-    SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
+    private StatusSignal<Angle> driveMotorSelectedPosition;
+    private StatusSignal<AngularVelocity> driveMotorSelectedSensorVelocity;
+    private StatusSignal<Angle> absolutePositionAngleEncoder;
+
+    private SparkMaxConfig config = new SparkMaxConfig();
+    private int moduleNumber;
 
 
 
     /** Instantiating motors and Encoders */
     public SwerveModuleReal(int moduleNumber, int driveMotorID, int angleMotorID, int cancoderID,
         Rotation2d angleOffset) {
-
+        this.moduleNumber = moduleNumber;
 
         mDriveMotor = new TalonFX(driveMotorID);
-        mAngleMotor = new CANSparkMax(angleMotorID, MotorType.kBrushless);
+        mAngleMotor = new SparkMax(angleMotorID, MotorType.kBrushless);
         angleEncoder = new CANcoder(cancoderID);
         angleMotorEncoder = mAngleMotor.getEncoder();
 
@@ -61,40 +72,22 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
     private void configAngleMotor() {
         /* Angle Motor Config */
-        this.mAngleMotor.restoreFactoryDefaults();
 
         /* Motor Inverts and Neutral Mode */
-        this.mAngleMotor.setInverted(false);
-        this.mAngleMotor.setIdleMode(Constants.Swerve.angleNeutralMode);
-
-        /* Gear Ratio and Wrapping Config */
-        // swerveAngleFXConfig.Feedback.SensorToMechanismRatio = Constants.Swerve.angleGearRatio;
-        // swerveAngleFXConfig.ClosedLoopGeneral.ContinuousWrap = true;
-
-        // /* Current Limiting */
-        this.mAngleMotor.setSmartCurrentLimit(Constants.Swerve.angleCurrentLimit);
-        this.mAngleMotor.setSecondaryCurrentLimit(Constants.Swerve.angleCurrentThreshold);
-        // swerveAngleFXConfig.CurrentLimits.SupplyCurrentThreshold =
-        // Constants.Swerve.angleCurrentThreshold;
-        // swerveAngleFXConfig.CurrentLimits.SupplyTimeThreshold =
-        // Constants.Swerve.angleCurrentThresholdTime;
-
+        config.inverted(false).idleMode(IdleMode.kBrake).voltageCompensation(12);
         // /* PID Config */
-        this.angleController = mAngleMotor.getPIDController();
-        this.angleController.setFeedbackDevice(this.angleMotorEncoder);
-        this.angleController.setP(Constants.Swerve.angleKP);
-        this.angleController.setI(Constants.Swerve.angleKI);
-        this.angleController.setD(Constants.Swerve.angleKD);
-        this.angleController.setOutputRange(Constants.Swerve.angleMinOutput,
-            Constants.Swerve.angleMaxOutput);
+        config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            .pid(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD)
+            .positionWrappingEnabled(true).positionWrappingMinInput(-0.5)
+            .positionWrappingMaxInput(0.5)
+            .outputRange(Constants.Swerve.angleMinOutput, Constants.Swerve.angleMaxOutput);
+        config.encoder.positionConversionFactor(Constants.Swerve.angleGearRatio)
+            .velocityConversionFactor(Constants.Swerve.angleGearRatio);
 
-        this.angleMotorEncoder.setPositionConversionFactor(Constants.Swerve.angleGearRatio);
-        this.angleMotorEncoder.setVelocityConversionFactor(Constants.Swerve.angleGearRatio);
-        this.angleController.setPositionPIDWrappingEnabled(true);
-        this.angleController.setPositionPIDWrappingMinInput(-0.5);
-        this.angleController.setPositionPIDWrappingMaxInput(0.5);
+        this.angleController = mAngleMotor.getClosedLoopController();
 
-        this.mAngleMotor.burnFlash();
+        this.mAngleMotor.configure(config, ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters);
     }
 
     private void configDriveMotor() {
@@ -111,9 +104,9 @@ public class SwerveModuleReal implements SwerveModuleIO {
         swerveDriveFXConfig.CurrentLimits.SupplyCurrentLimitEnable =
             Constants.Swerve.driveEnableCurrentLimit;
         swerveDriveFXConfig.CurrentLimits.SupplyCurrentLimit = Constants.Swerve.driveCurrentLimit;
-        swerveDriveFXConfig.CurrentLimits.SupplyCurrentThreshold =
+        swerveDriveFXConfig.CurrentLimits.SupplyCurrentLowerLimit =
             Constants.Swerve.driveCurrentThreshold;
-        swerveDriveFXConfig.CurrentLimits.SupplyTimeThreshold =
+        swerveDriveFXConfig.CurrentLimits.SupplyCurrentLowerTime =
             Constants.Swerve.driveCurrentThresholdTime;
 
         /* PID Config */
@@ -138,7 +131,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
     private void configAngleEncoder() {
         /* Angle Encoder Config */
         swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.Swerve.cancoderInvert;
-
+        swerveCANcoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
         angleEncoder.getConfigurator().apply(swerveCANcoderConfig);
     }
 
@@ -146,7 +139,7 @@ public class SwerveModuleReal implements SwerveModuleIO {
 
     @Override
     public void setAngleMotor(double v) {
-        angleController.setReference(v, CANSparkBase.ControlType.kPosition);
+        angleController.setReference(v, SparkBase.ControlType.kPosition);
     }
 
 
@@ -161,14 +154,15 @@ public class SwerveModuleReal implements SwerveModuleIO {
             absolutePositionAngleEncoder);
         inputs.driveMotorSelectedPosition = driveMotorSelectedPosition.getValue();
         inputs.driveMotorSelectedSensorVelocity = driveMotorSelectedSensorVelocity.getValue();
-        inputs.angleMotorSelectedPosition = angleMotorEncoder.getPosition();
+        inputs.angleMotorSelectedPosition = Rotations.of(angleMotorEncoder.getPosition());
         inputs.absolutePositionAngleEncoder = absolutePositionAngleEncoder.getValue();
     }
 
 
     @Override
     public void setPositionAngleMotor(double absolutePosition) {
-        angleMotorEncoder.setPosition(absolutePosition);
+        REVLibError a = angleMotorEncoder.setPosition(absolutePosition);
+        Logger.recordOutput("SetPositionAngleError/" + moduleNumber, a);
     }
 
 }

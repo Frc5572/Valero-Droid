@@ -68,7 +68,6 @@ public class Robot extends LoggedRobot {
         if (isReal()) {
             Logger.addDataReceiver(new WPILOGWriter("/media/sda1")); // Log to a USB stick
             Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-            // new PowerDistribution(1, ModuleType.kRev); // Enables power distribution logging
             setUseTiming(true);
             robotRunType = RobotRunType.kReal;
         } else {
@@ -88,7 +87,6 @@ public class Robot extends LoggedRobot {
 
             }
         }
-        // Logger.disableDeterministicTimestamps() // See "Deterministic Timestamps" in the
         // "Understanding Data Flow" page
         Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values
 
